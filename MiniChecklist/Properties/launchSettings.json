@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MiniChecklist": {
+      "commandName": "Project",
+      "commandLineArgs": "Resources\\DemoChecklist.txt"
+    }
+  }
+}
