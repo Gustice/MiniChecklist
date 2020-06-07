@@ -20,7 +20,7 @@ namespace MiniChecklist.FileReader
                 return result;
             
             foreach (var item in lines)
-                list.Add(new TodoTask() { Task = item });
+                list.Add(new TodoTask(item));
 
             result.ChangeStatus(ReadResult.ReadSuccess);
             result.AddData(list);

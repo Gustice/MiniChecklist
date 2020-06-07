@@ -45,10 +45,15 @@ namespace MiniChecklist.ViewModels
         {
             Caption = "DemoConstructor";
 
-            TodoList.Add(new TodoTask() { Task = "CheckMe" });
-            TodoList.Add(new TodoTask() { Task = "DoMe" });
-            TodoList.Add(new TodoTask() { Task = "FinishMe" });
-            TodoList.Add(new TodoTask() { Done = true, Task = "I'm Done" });
+            TodoList.Add(new TodoTask("CheckMe"));
+            TodoList.Add(new TodoTask("DoMe"));
+
+            var task = new TodoTask("FinishMe");
+            task.AddSubtasks(new TodoTask("Me also"));
+            task.AddSubtasks(new TodoTask("And Me"));
+            task.AddSubtasks(new TodoTask("And not to forget me"));
+            TodoList.Add(task);
+            TodoList.Add(new TodoTask("I'm Done") { Done = true});
         }
 
         public ChecklistViewModel(IEventAggregator ea, ITaskFileReader taskFileReader)

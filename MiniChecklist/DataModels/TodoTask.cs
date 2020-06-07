@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using System.Collections.ObjectModel;
+using Prism.Mvvm;
 
 namespace MiniChecklist.DataModels
 {
@@ -24,9 +25,25 @@ namespace MiniChecklist.DataModels
 
         public string Task { get; set; }
 
+        public ObservableCollection<TodoTask> SubList { get; } = new ObservableCollection<TodoTask>();
+
+        /// <summary> For Previewer Only</summary>
         public TodoTask()
         {
             Id = $"{++_id}";
         }
+
+
+        public TodoTask(string task)
+        {
+            Id = $"{++_id}";
+            Task = task;
+        }
+
+        public void AddSubtasks(TodoTask subtask)
+        {
+            SubList.Add(subtask);
+        }
+ 
     }
 }

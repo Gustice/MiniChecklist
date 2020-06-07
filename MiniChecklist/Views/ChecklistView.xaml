@@ -3,18 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local="clr-namespace:MiniChecklist.Converter"
+             xmlns:converter="clr-namespace:MiniChecklist.Converter"
+             xmlns:local="clr-namespace:MiniChecklist.Views"
              xmlns:viewModels="clr-namespace:MiniChecklist.ViewModels"
              xmlns:mvvm="http://prismlibrary.com/"
              mvvm:ViewModelLocator.AutoWireViewModel="True"
-             xmlns:System="clr-namespace:System;assembly=mscorlib"
              d:DataContext="{d:DesignInstance viewModels:ChecklistViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              d:DesignHeight="550"
              d:DesignWidth="350">
     <UserControl.Resources>
-        <local:TaskButtonBackgroundConverter x:Key="ButtonBackGround" />
-        <local:TaskButtonVisibilityConverter x:Key="ButtonVisibility" />
+        <converter:TaskButtonBackgroundConverter x:Key="ButtonBackGround" />
+        <converter:BoolToVisibilityConverter x:Key="ButtonVisibility" />
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -36,24 +36,7 @@
                           ItemsSource="{Binding TodoList}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid Margin="4"
-                              Visibility="{Binding Hide, Converter={StaticResource ButtonVisibility}}">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="8" />
-                                <ColumnDefinition Width="*" />
-                            </Grid.ColumnDefinitions>
-
-                            <CheckBox Grid.Column="0"
-                                      IsChecked="{Binding Done}" />
-                            <Button Grid.Column="2"
-                                    Background="{Binding Done, 
-                                        Converter={StaticResource ButtonBackGround}}"
-                                    Content="{Binding Task}"
-                                    Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl},
-                                        Path=DataContext.CheckTaskCommand}"
-                                    CommandParameter="{Binding Id}" />
-                        </Grid>
+                        <local:TaskView DataContext="{Binding}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
