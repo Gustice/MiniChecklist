@@ -38,9 +38,9 @@ namespace MiniChecklist.ViewModels
             TodoList.Add(new TodoTask("DoMe"));
 
             var task = new TodoTask("FinishMe");
-            task.AddSubtasks(new TodoTask("Me also"));
-            task.AddSubtasks(new TodoTask("And Me"));
-            task.AddSubtasks(new TodoTask("And not to forget me"));
+            task.Add(new TodoTask("Me also"));
+            task.Add(new TodoTask("And Me"));
+            task.Add(new TodoTask("And not to forget me"));
             TodoList.Add(task);
             TodoList.Add(new TodoTask("I'm Done") { Done = true});
         }

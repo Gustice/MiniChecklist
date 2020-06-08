@@ -1,9 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections;
+using System.Collections.ObjectModel;
 using Prism.Mvvm;
 
 namespace MiniChecklist.DataModels
 {
-    public class TodoTask : BindableBase
+    public class TodoTask : BindableBase, ICollection
     {
         static uint _id = 0;
 
@@ -44,10 +46,21 @@ namespace MiniChecklist.DataModels
             Task = task;
         }
 
-        public void AddSubtasks(TodoTask subtask)
+
+
+        public int Count => SubList.Count;
+
+        public bool IsSynchronized => throw new NotImplementedException();
+
+        public object SyncRoot => throw new NotImplementedException();
+
+        public void Add(TodoTask subtask)
         {
             SubList.Add(subtask);
         }
- 
+
+        public void CopyTo(Array array, int index) => SubList.CopyTo((TodoTask[])array, index);
+
+        public IEnumerator GetEnumerator() => SubList.GetEnumerator();
     }
 }

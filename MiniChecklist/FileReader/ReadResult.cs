@@ -8,6 +8,7 @@ namespace MiniChecklist.FileReader
     {
         FileNotFound,
         NoContent,
+        WrongFormat,
         ReadSuccess,
     }
 }
