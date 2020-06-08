@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MiniChecklist.ViewModels
 {
-    class EditListViewModel : BindableBase
+    public class EditListViewModel : BindableBase
     {
         /// <summary> For Preview only </summary>
         public EditListViewModel()

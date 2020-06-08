@@ -20,19 +20,11 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
 
-            <TextBlock Grid.Row="0"
-                       Padding="5"
-                       FontWeight="Bold"
-                       FontSize="14"
-                       HorizontalAlignment="Center"
-                       Text="{Binding Caption}" />
-
-            <ItemsControl Grid.Row="1"
+            <ItemsControl Grid.Row="0"
                           ItemsSource="{Binding TodoList}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -41,7 +33,7 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
 
-            <StackPanel Grid.Row="2"
+            <StackPanel Grid.Row="1"
                         Orientation="Horizontal"
                         HorizontalAlignment="Center">
                 <Button Margin="8"
@@ -49,11 +41,6 @@
                         Padding="20,2"
                         Content="Finsh All"
                         Command="{Binding FinishCommand}" />
-                <Button Margin="8"
-                        HorizontalAlignment="Center"
-                        Padding="20,2"
-                        Content="Open New"
-                        Command="{Binding OpenNewFileCommand}" />
                 <CheckBox Margin="8"
                           Name="Test"
                           IsChecked="{Binding HideFinished}"

@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MiniChecklist.Views"
+             xmlns:viewModels="clr-namespace:MiniChecklist.ViewModels"
              xmlns:mvvm="http://prismlibrary.com/"
              mvvm:ViewModelLocator.AutoWireViewModel="True"
-             d:DataContext="{d:DesignInstance viewModels:EditlistViewModel, IsDesignTimeCreatable=True}"
+             d:DataContext="{d:DesignInstance viewModels:EditListViewModel, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              d:DesignHeight="550"
              d:DesignWidth="350">
