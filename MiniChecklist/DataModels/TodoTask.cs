@@ -31,6 +31,10 @@ namespace MiniChecklist.DataModels
         public TodoTask()
         {
             Id = $"{++_id}";
+
+            Task = "Task";
+            SubList.Add(new TodoTask("SubTask1"));
+            SubList.Add(new TodoTask("SubTask2"));
         }
 
 

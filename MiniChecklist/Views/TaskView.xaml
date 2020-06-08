@@ -6,7 +6,7 @@
              xmlns:model="clr-namespace:MiniChecklist.DataModels"
              xmlns:converter="clr-namespace:MiniChecklist.Converter"
              xmlns:local="clr-namespace:MiniChecklist.Views"
-             d:DataContext="{d:DesignInstance model:TodoTask}"
+             d:DataContext="{d:DesignInstance model:TodoTask, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
              d:DesignHeight="80"
              d:DesignWidth="350">
