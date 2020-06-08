@@ -48,6 +48,7 @@ namespace MiniChecklist
         private void RegisterViews(IRegionManager regionManager)
         {
             regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(ChecklistView));
+            regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(EditListView));
 
             regionManager.RequestNavigate(RegionNames.MainRegion, nameof(ChecklistView));
         }
