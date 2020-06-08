@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using Prism.Commands;
 using Prism.Mvvm;
 
-namespace MiniChecklist.DataModels
+namespace MiniChecklist.ViewModels
 {
     public class TodoTask : BindableBase, ICollection
     {
         static uint _id = 0;
-
-        public string Id { get; set; }
 
         private bool _done;
         public bool Done
@@ -25,6 +24,8 @@ namespace MiniChecklist.DataModels
             set => SetProperty(ref _hide, value);
         }
 
+        public DelegateCommandBase CheckTaskCommand { get; }
+
         public string Task { get; set; }
 
         public ObservableCollection<TodoTask> SubList { get; } = new ObservableCollection<TodoTask>();
@@ -32,21 +33,24 @@ namespace MiniChecklist.DataModels
         /// <summary> For Previewer Only</summary>
         public TodoTask()
         {
-            Id = $"{++_id}";
 
             Task = "Task";
             SubList.Add(new TodoTask("SubTask1"));
             SubList.Add(new TodoTask("SubTask2"));
         }
 
-
         public TodoTask(string task)
         {
-            Id = $"{++_id}";
             Task = task;
+
+            CheckTaskCommand = new DelegateCommand(OnCheckTask);
         }
 
-
+        private void OnCheckTask()
+        {
+            Done = !Done;
+            //Hide = Done && HideFinished; // @todo
+        }
 
         public int Count => SubList.Count;
 

@@ -1,4 +1,4 @@
-﻿using MiniChecklist.DataModels;
+﻿using MiniChecklist.ViewModels;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -59,7 +59,10 @@ namespace MiniChecklist.FileReader
                     indent = ci;
                     idxStack.Peek().Add(task);
                 }
-
+                else
+                {
+                    return result;
+                }
             }
 
             result.ChangeStatus(ReadResult.ReadSuccess);

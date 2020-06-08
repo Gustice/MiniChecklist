@@ -1,11 +1,10 @@
-﻿using MiniChecklist.DataModels;
+﻿using MiniChecklist.ViewModels;
 using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using Prism.Events;
 using System.Linq;
 using MiniChecklist.Events;
-using System;
 using System.Collections.Generic;
 
 namespace MiniChecklist.ViewModels
@@ -28,7 +27,6 @@ namespace MiniChecklist.ViewModels
         
 
         public DelegateCommandBase FinishCommand { get; }
-        public DelegateCommandBase CheckTaskCommand { get; }
 
 
         /// <summary> For Preview only </summary>
@@ -48,7 +46,6 @@ namespace MiniChecklist.ViewModels
         public ChecklistViewModel(IEventAggregator ea)
         {
             FinishCommand = new DelegateCommand(OnFinish);
-            CheckTaskCommand = new DelegateCommand<string>(OnCheckTask);
 
             ea.GetEvent<SetTasksEvent>().Subscribe(OnSetTasks);
         }
@@ -57,13 +54,6 @@ namespace MiniChecklist.ViewModels
         {
             TodoList.Clear();
             TodoList.AddRange(obj);
-        }
-
-        private void OnCheckTask(string id)
-        {
-            var item = TodoList.Single(x => x.Id == id);
-            item.Done = !item.Done;
-            item.Hide = item.Done && HideFinished;
         }
 
         private void OnFinish()

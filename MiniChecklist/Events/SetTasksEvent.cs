@@ -1,4 +1,4 @@
-﻿using MiniChecklist.DataModels;
+﻿using MiniChecklist.ViewModels;
 using Prism.Events;
 using System.Collections.Generic;
 

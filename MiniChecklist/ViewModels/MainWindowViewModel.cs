@@ -1,11 +1,8 @@
 ﻿using System;
 using MiniChecklist.FileReader;
-using MiniChecklist.DataModels;
-using System.Collections.ObjectModel;
 using System.IO;
 using Prism.Events;
 using MiniChecklist.Events;
-using System.Linq;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;

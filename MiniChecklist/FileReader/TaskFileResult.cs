@@ -1,4 +1,4 @@
-﻿using MiniChecklist.DataModels;
+﻿using MiniChecklist.ViewModels;
 using System.Collections.Generic;
 
 namespace MiniChecklist.FileReader
