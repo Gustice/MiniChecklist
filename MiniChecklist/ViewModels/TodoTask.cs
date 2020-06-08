@@ -8,13 +8,37 @@ namespace MiniChecklist.ViewModels
 {
     public class TodoTask : BindableBase, ICollection
     {
-        static uint _id = 0;
-
         private bool _done;
         public bool Done
         {
-            get => _done;
-            set => SetProperty(ref _done, value);
+            get => _done || _implicitDone;
+            set
+            {
+                SetProperty(ref _done, value);
+                // todo parent undo
+                foreach (var item in SubList)
+                {
+                    item.ImplicitDone = _done;
+                }
+            }
+        }
+
+        private bool _implicitDone;
+
+        public bool ImplicitDone
+        {
+            get => _implicitDone;
+            set
+            {
+                _implicitDone = value;
+
+                RaisePropertyChanged(nameof(Done));
+
+                foreach (var item in SubList)
+                {
+                    item.ImplicitDone = value;
+                }
+            }
         }
 
         private bool _hide;
@@ -22,6 +46,21 @@ namespace MiniChecklist.ViewModels
         {
             get => _hide;
             set => SetProperty(ref _hide, value);
+        }
+
+
+        private bool _hideFinished;
+        public bool HideFinished
+        {
+            get => _hideFinished;
+            set
+            {
+                _hideFinished = value;
+                Hide = Done && _hideFinished;
+
+                foreach (var item in SubList)
+                    item.HideFinished = value;
+            }
         }
 
         public DelegateCommandBase CheckTaskCommand { get; }
@@ -49,7 +88,7 @@ namespace MiniChecklist.ViewModels
         private void OnCheckTask()
         {
             Done = !Done;
-            //Hide = Done && HideFinished; // @todo
+            Hide = Done && HideFinished;
         }
 
         public int Count => SubList.Count;

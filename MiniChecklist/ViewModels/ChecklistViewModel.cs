@@ -13,15 +13,18 @@ namespace MiniChecklist.ViewModels
     {
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
-        private bool _hide;
+        private bool _hideFinished;
         public bool HideFinished
         {
-            get => _hide;
+            get => _hideFinished;
             set
             {
-                SetProperty(ref _hide, value);
+                SetProperty(ref _hideFinished, value);
                 foreach (var item in TodoList)
-                    item.Hide = item.Done && _hide;
+                {
+                    item.HideFinished = _hideFinished;
+                    // item.Hide = item.Done && _hideFinished;
+                }
             }
         }
         
