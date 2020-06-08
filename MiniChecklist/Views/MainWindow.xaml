@@ -24,12 +24,17 @@
                             Value="4" />
                 </Style>
             </StackPanel.Resources>
-            <Button Content="New" />
-            <Button Content="Save" />
-            <Button Content="Open" />
-            <Button Content="Edit" />
+            <Button Content="New"
+                    Command="{Binding NewCommand}" />
+            <Button Content="Save"
+                    Command="{Binding SaveCommand}" />
+            <Button Content="Open"
+                    Command="{Binding LoadCommand}" />
+            <Button Content="Edit"
+                    Command="{Binding EditCommand}" />
         </StackPanel>
-        
-        <ContentControl Grid.Row="2" regions:RegionManager.RegionName="{x:Static defines:RegionNames.MainRegion}" />
+
+        <ContentControl Grid.Row="2"
+                        regions:RegionManager.RegionName="{x:Static defines:RegionNames.MainRegion}" />
     </Grid>
 </Window>

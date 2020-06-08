@@ -41,6 +41,7 @@ namespace MiniChecklist.ViewModels
 
         public ITaskFileReader TaskFileReader { get; }
 
+        /// <summary> For Preview only </summary>
         public ChecklistViewModel()
         {
             Caption = "DemoConstructor";
