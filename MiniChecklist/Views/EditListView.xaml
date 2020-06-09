@@ -11,7 +11,35 @@
              mc:Ignorable="d"
              d:DesignHeight="550"
              d:DesignWidth="350">
-    <Grid>
-            
-    </Grid>
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="auto" />
+            </Grid.RowDefinitions>
+
+            <ItemsControl Grid.Row="0"
+                          ItemsSource="{Binding TodoList}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:EditView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <!--<StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center">
+                <Button Margin="8"
+                        HorizontalAlignment="Center"
+                        Padding="20,2"
+                        Content="Finsh All"
+                        Command="{Binding FinishCommand}" />
+                <CheckBox Margin="8"
+                          Name="Test"
+                          IsChecked="{Binding HideFinished}"
+                          Content="Hide Checked" />
+            </StackPanel>-->
+        </Grid>
+    </ScrollViewer>
 </UserControl>

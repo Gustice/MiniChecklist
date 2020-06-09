@@ -64,9 +64,19 @@ namespace MiniChecklist.ViewModels
 
         public DelegateCommandBase CheckTaskCommand { get; }
 
-        public string Task { get; }
+        private string _task;
+        public string Task
+        {
+            get => _task;
+            set => SetProperty(ref _task, value);
+        }
 
-        public string Description { get; set; }
+        private string _description;
+        public string Description
+        {
+            get => _description;
+            set => SetProperty(ref _description, value);
+        }
 
         public ObservableCollection<TodoTask> SubList { get; } = new ObservableCollection<TodoTask>();
 
@@ -74,10 +84,12 @@ namespace MiniChecklist.ViewModels
         public TodoTask()
         {
 
-            Task = "Task";
-            Description = "This is the Description";
-            SubList.Add(new TodoTask("SubTask1"));
-            SubList.Add(new TodoTask("SubTask2"));
+            Task = "First level Task";
+            Description = "Description for first level Task";
+            SubList.Add(new TodoTask("Second level Task"));
+            var subTask = new TodoTask("Second level Task");
+            SubList.Add(subTask);
+            subTask.Done = true;
         }
 
         public TodoTask(string task) : this(task, "")
