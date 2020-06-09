@@ -48,7 +48,6 @@ namespace MiniChecklist.ViewModels
             set => SetProperty(ref _hide, value);
         }
 
-
         private bool _hideFinished;
         public bool HideFinished
         {
@@ -76,6 +75,7 @@ namespace MiniChecklist.ViewModels
         {
 
             Task = "Task";
+            Description = "This is the Description";
             SubList.Add(new TodoTask("SubTask1"));
             SubList.Add(new TodoTask("SubTask2"));
         }

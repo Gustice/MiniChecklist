@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:MiniChecklist.Views"
              d:DataContext="{d:DesignInstance model:TodoTask, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
-             d:DesignHeight="80"
+             d:DesignHeight="100"
              d:DesignWidth="350">
     <UserControl.Resources>
         <converter:TaskButtonBackgroundConverter x:Key="ButtonBackGround" />
@@ -23,19 +23,55 @@
 
         <Grid Grid.Row="0"
               Margin="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="8" />
                 <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
-            <CheckBox Grid.Column="0"
+            <CheckBox Grid.Row="0"
+                      Grid.Column="0"
                       IsChecked="{Binding Done}" />
-            <Button Grid.Column="2"
+            <Button Grid.Row="0"
+                    Grid.Column="2"
                     Background="{Binding Done, 
                                         Converter={StaticResource ButtonBackGround}}"
                     Content="{Binding Task}"
-                    Command="{Binding CheckTaskCommand}" ToolTip="{Binding Description}" />
+                    Command="{Binding CheckTaskCommand}"
+                    ToolTip="{Binding Description}" />
+
+            <Expander Grid.Row="0"
+                      Grid.Column="3"
+                      Name="ShowDescription"/>
+
+            <TextBlock Grid.Row="1"
+                       Grid.Column="2"
+                       Grid.ColumnSpan="2"
+                       Text="{Binding Description}"
+                       TextWrapping="Wrap">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=ShowDescription, Path=IsExpanded}"
+                                         Value="True">
+                                <Setter Property="Visibility"
+                                        Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=ShowDescription, Path=IsExpanded}"
+                                         Value="False">
+                                <Setter Property="Visibility"
+                                        Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+
         </Grid>
 
         <Grid Grid.Row="1">
