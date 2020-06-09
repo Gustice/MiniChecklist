@@ -71,11 +71,15 @@ namespace MiniChecklist.ViewModels
         private void OnEdit()
         {
             _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(EditListView));
+            CanSave = true;
+            CanEdit = false;
         }
 
         private void OnSave()
         {
-            throw new NotImplementedException();
+            _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(ChecklistView));
+            CanSave = false;
+            CanEdit = true;
         }
 
         private void OnLoad()
@@ -111,7 +115,6 @@ namespace MiniChecklist.ViewModels
 
             _setTasksEvent.Publish(result.Todos);
             CanEdit = true;
-            CanSave = true;
         }
 
         private void OnNew()

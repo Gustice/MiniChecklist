@@ -23,40 +23,79 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0"
-              Margin="4">
+        <Grid Grid.Row="0">
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="auto" />
             </Grid.ColumnDefinitions>
 
+            <Button Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="4"
+                    Padding="4,0"
+                    Content="–"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Remove" />
+
+
             <TextBox Grid.Row="0"
-                     Grid.Column="0"
+                     Grid.Column="1"
                      Text="{Binding Task}"
                      Margin="4"
                      ToolTip="Task-Name: Will be used as Button label" />
 
             <Button Grid.Row="0"
-                    Grid.Column="1"
-                    Margin="4"
-                    Padding="4,0"
-                    Content="↑" />
-            <Button Grid.Row="0"
                     Grid.Column="2"
                     Margin="4"
                     Padding="4,0"
-                    Content="↓" />
+                    Content="↑"
+                    ToolTip="Move Taks up"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Up" />
+
+            <Button Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="4"
+                    Padding="4,0"
+                    Content="↓"
+                    ToolTip="Move Taks down"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Down" />
+
+            <Button Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="4"
+                    Padding="4,0"
+                    Content="+" 
+                    ToolTip="Add Sibling to above Task"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Sibling"
+                    />
+            <Button Grid.Row="1"
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    Margin="4"
+                    Padding="4,0"
+                    Content="↳"
+                    ToolTip="Add Child to above Task"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Child"
+                    />
 
             <TextBox Grid.Row="1"
-                     Grid.Column="0"
-                     Grid.ColumnSpan="3"
+                     Grid.Column="1"
+                     Grid.ColumnSpan="1"
+                     Grid.RowSpan="2"
+                     VerticalContentAlignment="Top"
                      Text="{Binding Description, FallbackValue='This is the Description for the Task'}"
                      TextWrapping="Wrap"
                      Background="{Binding Path=Background, Converter={StaticResource DarkenConverter}}"

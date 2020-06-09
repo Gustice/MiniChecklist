@@ -6,7 +6,7 @@ using Prism.Mvvm;
 
 namespace MiniChecklist.ViewModels
 {
-    public class TodoTask : BindableBase, ICollection
+    public class TodoTask : BindableBase, IList
     {
         private bool _done;
         public bool Done
@@ -63,8 +63,12 @@ namespace MiniChecklist.ViewModels
         }
 
         public DelegateCommandBase CheckTaskCommand { get; }
+        public DelegateCommandBase ManipulateTaskCommand { get; }
 
         private string _task;
+
+        private IList _parent;
+
         public string Task
         {
             get => _task;
@@ -99,9 +103,50 @@ namespace MiniChecklist.ViewModels
 
         public TodoTask(string task, string description)
         {
+            
             Task = task;
             Description = description;
             CheckTaskCommand = new DelegateCommand(OnCheckTask);
+            ManipulateTaskCommand = new DelegateCommand<string>(OnManipulateTask);
+        }
+
+        public void SetParent(IList parent)
+        {
+            _parent = parent;
+        }
+
+        private void OnManipulateTask(string command)
+        {
+            switch (command)
+            {
+                case "Sibling":
+                    var sibling = new TodoTask("", "");
+                    sibling.SetParent(_parent);
+                    _parent.Insert(_parent.IndexOf(this)+1, sibling);
+                    break;
+
+                case "Child":
+                    var child = new TodoTask("", "");
+                    child.SetParent(this);
+
+                    this.Insert(0, child);
+                    break;
+
+                case "Remove":
+                    _parent.Remove(this);
+                    break;
+
+                case "Up":
+
+                    break;
+
+                case "Down":
+
+                    break;
+
+                default:
+                    break;
+            }
         }
 
         private void OnCheckTask()
@@ -116,13 +161,36 @@ namespace MiniChecklist.ViewModels
 
         public object SyncRoot => throw new NotImplementedException();
 
-        public void Add(TodoTask subtask)
+        public bool IsFixedSize => false;
+
+        public bool IsReadOnly => false;
+
+        public object this[int index]
+        {
+            get => _index;
+            set
+            {
+                _index = (int?)value; }
+        }
+
+        private int? _index;
+
+        public int Add(TodoTask subtask)
         {
             SubList.Add(subtask);
+            return 0;
         }
 
         public void CopyTo(Array array, int index) => SubList.CopyTo((TodoTask[])array, index);
 
         public IEnumerator GetEnumerator() => SubList.GetEnumerator();
+
+        public int Add(object value) => Add((TodoTask)value);
+        public void Clear() => SubList.Clear();
+        public bool Contains(object value) => SubList.Contains((TodoTask)value);
+        public int IndexOf(object value) => SubList.IndexOf((TodoTask)value);
+        public void Insert(int index, object value) => SubList.Insert(index, (TodoTask)value);
+        public void Remove(object value) => SubList.Remove((TodoTask)value);
+        public void RemoveAt(int index) => SubList.RemoveAt(index);
     }
 }
