@@ -6,7 +6,9 @@ using MiniChecklist.Events;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
-
+using Prism.Regions;
+using MiniChecklist.Defines;
+using MiniChecklist.Views;
 
 namespace MiniChecklist.ViewModels
 {
@@ -43,8 +45,9 @@ namespace MiniChecklist.ViewModels
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand EditCommand { get; }
 
-        public ITaskFileReader TaskFileReader { get; }
+        public ITaskFileReader _taskFileReader { get; }
         SetTasksEvent _setTasksEvent;
+        IRegionManager _regionManager;
 
         public MainWindowViewModel()
         {
@@ -54,22 +57,20 @@ namespace MiniChecklist.ViewModels
             LoadCommand = new DelegateCommand(OnLoad);
             SaveCommand = new DelegateCommand(OnSave).ObservesCanExecute(() => CanSave);
             EditCommand = new DelegateCommand(OnEdit).ObservesCanExecute(() => CanEdit);
-
-            CanSave = false;
-            CanEdit = false;
         }
 
-        public MainWindowViewModel(IEventAggregator ea, ITaskFileReader taskFileReader) : this()
+        public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader) : this()
         {
-            TaskFileReader = taskFileReader;
+            _taskFileReader = TaksFeilReader;
+            _regionManager = regionManagerm;
 
-            ea.GetEvent<LoadFileEvent>().Subscribe(OpenNewFileEvent);
-            _setTasksEvent = ea.GetEvent<SetTasksEvent>();
+            eventAggregator.GetEvent<LoadFileEvent>().Subscribe(OpenNewFileEvent);
+            _setTasksEvent = eventAggregator.GetEvent<SetTasksEvent>();
         }
 
         private void OnEdit()
         {
-            throw new NotImplementedException();
+            _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(EditListView));
         }
 
         private void OnSave()
@@ -87,7 +88,7 @@ namespace MiniChecklist.ViewModels
 
             if (openFileDialog.ShowDialog() == true)
             {
-                var result = TaskFileReader.ReadTasksFromFile(openFileDialog.FileName);
+                var result = _taskFileReader.ReadTasksFromFile(openFileDialog.FileName);
                 UpdateView(result);
             }
         }
@@ -109,6 +110,8 @@ namespace MiniChecklist.ViewModels
             Caption = fileName;
 
             _setTasksEvent.Publish(result.Todos);
+            CanEdit = true;
+            CanSave = true;
         }
 
         private void OnNew()
@@ -118,7 +121,7 @@ namespace MiniChecklist.ViewModels
 
         private void OpenNewFileEvent(string path)
         {
-            var result = TaskFileReader.ReadTasksFromFile(path);
+            var result = _taskFileReader.ReadTasksFromFile(path);
             UpdateView(result);
         }
     }
