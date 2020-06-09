@@ -6,7 +6,7 @@ using MiniChecklist.Events;
 using Microsoft.Win32;
 using Prism.Commands;
 using Prism.Mvvm;
-
+using System.Windows;
 
 namespace MiniChecklist.ViewModels
 {
@@ -113,7 +113,8 @@ namespace MiniChecklist.ViewModels
 
         private void OnNew()
         {
-            throw new NotImplementedException();
+            // throw new NotImplementedException();
+            MessageBox.Show("Not implemented yet, sorry");
         }
 
         private void OpenNewFileEvent(string path)

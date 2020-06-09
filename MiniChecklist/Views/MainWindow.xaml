@@ -21,7 +21,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        
+
         <StackPanel Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style TargetType="Button">
@@ -32,13 +32,16 @@
                 </Style>
             </StackPanel.Resources>
             <Button Content="New"
-                    Command="{Binding NewCommand}" />
+                    Command="{Binding NewCommand}"
+                    IsEnabled="False" />
             <Button Content="Save"
-                    Command="{Binding SaveCommand}" />
+                    Command="{Binding SaveCommand}"
+                    IsEnabled="False" />
             <Button Content="Open"
                     Command="{Binding LoadCommand}" />
             <Button Content="Edit"
-                    Command="{Binding EditCommand}" />
+                    Command="{Binding EditCommand}"
+                    IsEnabled="False" />
         </StackPanel>
 
         <TextBlock Grid.Row="1"
