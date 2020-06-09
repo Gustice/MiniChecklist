@@ -26,6 +26,18 @@ namespace MiniChecklist.FileReader
             if (TabPreambel.Match(lines[0]).Value.Length > 0)
                 return result;
 
+            list.AddRange(ProcessLines(lines));
+
+            result.ChangeStatus(ReadResult.ReadSuccess);
+            result.AddData(list);
+
+            return result;
+        }
+
+        private List<TodoTask> ProcessLines(string[] lines)
+        {
+            var list = new List<TodoTask>();
+
             int indent = 0;
             ICollection<TodoTask> lastIdx = null;
             Stack<ICollection<TodoTask>> idxStack = new Stack<ICollection<TodoTask>>();
@@ -35,21 +47,24 @@ namespace MiniChecklist.FileReader
                 var ci = TabPreambel.Match(item).Value.Length;
                 var cleared = TabPreambel.Replace(item, "");
                 var task = new TodoTask(cleared);
-                if (ci == indent)
+                // Ident stays on same level
+                if (ci == indent) 
                 {
                     idxStack.Peek().Add(task);
                     lastIdx = task.SubList;
                 }
-                else if (ci == indent + 1)
+                // Ident increases by one
+                else if (ci == indent + 1) 
                 {
                     indent = ci;
                     idxStack.Push(lastIdx);
                     lastIdx.Add(task);
                 }
-                else if (ci < indent)
+                // Ident decreses by any level in range of stack
+                else if (ci < indent) 
                 {
                     if ((indent - ci) > idxStack.Count)
-                        return result;
+                        return list;
 
                     for (int i = 0; i < indent - ci; i++)
                     {
@@ -59,16 +74,14 @@ namespace MiniChecklist.FileReader
                     indent = ci;
                     idxStack.Peek().Add(task);
                 }
+                // Else format error
                 else
                 {
-                    return result;
+                    return list;
                 }
             }
 
-            result.ChangeStatus(ReadResult.ReadSuccess);
-            result.AddData(list);
-
-            return result;
+            return list;
         }
     }
 }
