@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:MiniChecklist.Views"
              d:DataContext="{d:DesignInstance model:TodoTask, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
-             d:DesignHeight="100"
+             d:DesignHeight="140"
              d:DesignWidth="350">
     <UserControl.Resources>
         <converter:TaskButtonBackgroundConverter x:Key="ButtonBackGround" />
@@ -47,13 +47,13 @@
 
             <Expander Grid.Row="0"
                       Grid.Column="3"
-                      Name="ShowDescription"/>
+                      Name="ShowDescription" Margin="4,0,0,0" />
 
             <TextBlock Grid.Row="1"
                        Grid.Column="2"
                        Grid.ColumnSpan="2"
                        Text="{Binding Description}"
-                       TextWrapping="Wrap">
+                       TextWrapping="Wrap" Padding="4">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Style.Triggers>
