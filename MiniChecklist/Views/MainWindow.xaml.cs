@@ -1,4 +1,4 @@
-﻿namespace MiniChecklist
+﻿namespace MiniChecklist.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
