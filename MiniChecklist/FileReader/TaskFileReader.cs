@@ -46,22 +46,29 @@ namespace MiniChecklist.FileReader
             {
                 var ci = TabPreambel.Match(item).Value.Length;
                 var cleared = TabPreambel.Replace(item, "");
-                var task = new TodoTask(cleared);
+
+                TodoTask task = ProcessLine(cleared);
+
+                if (task == null)
+                {
+                    continue;
+                }
+
                 // Ident stays on same level
-                if (ci == indent) 
+                if (ci == indent)
                 {
                     idxStack.Peek().Add(task);
                     lastIdx = task.SubList;
                 }
                 // Ident increases by one
-                else if (ci == indent + 1) 
+                else if (ci == indent + 1)
                 {
                     indent = ci;
                     idxStack.Push(lastIdx);
                     lastIdx.Add(task);
                 }
                 // Ident decreses by any level in range of stack
-                else if (ci < indent) 
+                else if (ci < indent)
                 {
                     if ((indent - ci) > idxStack.Count)
                         return list;
@@ -82,6 +89,23 @@ namespace MiniChecklist.FileReader
             }
 
             return list;
+        }
+
+        private static TodoTask ProcessLine(string cleared)
+        {
+            TodoTask task = null;
+            var parts = cleared.Split('#');
+            if (parts.Length == 2)
+            {
+                task = new TodoTask(parts[0], parts[1]);
+
+            }
+            else if (parts.Length == 1)
+            {
+                task = new TodoTask(parts[0]);
+            }
+
+            return task;
         }
     }
 }

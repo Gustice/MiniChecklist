@@ -48,7 +48,6 @@ namespace MiniChecklist.ViewModels
             set => SetProperty(ref _hide, value);
         }
 
-
         private bool _hideFinished;
         public bool HideFinished
         {
@@ -65,7 +64,9 @@ namespace MiniChecklist.ViewModels
 
         public DelegateCommandBase CheckTaskCommand { get; }
 
-        public string Task { get; set; }
+        public string Task { get; }
+
+        public string Description { get; set; }
 
         public ObservableCollection<TodoTask> SubList { get; } = new ObservableCollection<TodoTask>();
 
@@ -74,14 +75,20 @@ namespace MiniChecklist.ViewModels
         {
 
             Task = "Task";
+            Description = "This is the Description";
             SubList.Add(new TodoTask("SubTask1"));
             SubList.Add(new TodoTask("SubTask2"));
         }
 
-        public TodoTask(string task)
+        public TodoTask(string task) : this(task, "")
+        {
+
+        }
+
+        public TodoTask(string task, string description)
         {
             Task = task;
-
+            Description = description;
             CheckTaskCommand = new DelegateCommand(OnCheckTask);
         }
 
