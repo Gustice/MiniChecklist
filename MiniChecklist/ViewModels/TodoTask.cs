@@ -65,7 +65,9 @@ namespace MiniChecklist.ViewModels
 
         public DelegateCommandBase CheckTaskCommand { get; }
 
-        public string Task { get; set; }
+        public string Task { get; }
+
+        public string Description { get; set; }
 
         public ObservableCollection<TodoTask> SubList { get; } = new ObservableCollection<TodoTask>();
 
@@ -78,10 +80,15 @@ namespace MiniChecklist.ViewModels
             SubList.Add(new TodoTask("SubTask2"));
         }
 
-        public TodoTask(string task)
+        public TodoTask(string task) : this(task, "")
+        {
+
+        }
+
+        public TodoTask(string task, string description)
         {
             Task = task;
-
+            Description = description;
             CheckTaskCommand = new DelegateCommand(OnCheckTask);
         }
 

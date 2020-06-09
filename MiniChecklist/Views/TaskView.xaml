@@ -35,7 +35,7 @@
                     Background="{Binding Done, 
                                         Converter={StaticResource ButtonBackGround}}"
                     Content="{Binding Task}"
-                    Command="{Binding CheckTaskCommand}" />
+                    Command="{Binding CheckTaskCommand}" ToolTip="{Binding Description}" />
         </Grid>
 
         <Grid Grid.Row="1">
