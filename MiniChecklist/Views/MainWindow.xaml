@@ -10,12 +10,18 @@
         Title="Check-List-Generator"
         Height="550"
         Width="350">
+    <Window.Style>
+        <Style TargetType="Window"
+               BasedOn="{StaticResource {x:Type Window}}" />
+    </Window.Style>
+
     <Grid Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        
         <StackPanel Orientation="Horizontal">
             <StackPanel.Resources>
                 <Style TargetType="Button">

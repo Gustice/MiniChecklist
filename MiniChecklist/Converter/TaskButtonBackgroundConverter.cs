@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -12,10 +10,10 @@ namespace MiniChecklist.Converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var val = (bool)value;
-            var color = Colors.LightSalmon;
+            var color = Color.FromRgb(0x60, 0x20, 0x20);
 
             if (val)
-                color = Colors.LightGreen;
+                color = Color.FromRgb(0x20, 0x60, 0x20);
 
             return new SolidColorBrush(color);
         }
