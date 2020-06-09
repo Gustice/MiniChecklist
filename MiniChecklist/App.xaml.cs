@@ -24,7 +24,10 @@ namespace MiniChecklist
         }
 
         /// <inheritdoc /> // 3. This will be called third
-        protected override Window CreateShell() => new MainWindow();
+        protected override Window CreateShell()
+        {
+            return Container.Resolve<MainWindow>();
+        }
 
         /// <inheritdoc /> // 4. This will be called fourth
         protected override void InitializeShell(Window shell)
@@ -45,6 +48,7 @@ namespace MiniChecklist
         private void RegisterViews(IRegionManager regionManager)
         {
             regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(ChecklistView));
+            regionManager.RegisterViewWithRegion(RegionNames.MainRegion, typeof(EditListView));
 
             regionManager.RequestNavigate(RegionNames.MainRegion, nameof(ChecklistView));
         }

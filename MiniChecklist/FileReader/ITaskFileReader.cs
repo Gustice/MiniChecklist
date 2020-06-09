@@ -1,9 +1,4 @@
-﻿using MiniChecklist.DataModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MiniChecklist.FileReader
+﻿namespace MiniChecklist.FileReader
 {
     public interface ITaskFileReader
     {

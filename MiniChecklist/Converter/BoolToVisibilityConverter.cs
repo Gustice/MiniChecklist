@@ -5,7 +5,7 @@ using System.Windows.Data;
 
 namespace MiniChecklist.Converter
 {
-    class TaskButtonVisibilityConverter : IValueConverter
+    class BoolToVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
