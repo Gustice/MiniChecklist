@@ -24,7 +24,7 @@
         
         <StackPanel Orientation="Horizontal">
             <StackPanel.Resources>
-                <Style TargetType="Button">
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Margin"
                             Value="4" />
                     <Setter Property="Padding"
