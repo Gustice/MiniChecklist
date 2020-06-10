@@ -23,8 +23,7 @@ namespace MiniChecklist.Converter
 
         public System.Windows.Media.Color ToRgb()
         {
-            int r, g, b;
-            HlsToRgb(h, l, s, out r, out g, out b);
+            HlsToRgb(h, l, s, out int r, out int g, out int b);
             return System.Windows.Media.Color.FromArgb((byte)(a * 255.0), (byte)r, (byte)g, (byte)b);
         }
 
@@ -81,7 +80,7 @@ namespace MiniChecklist.Converter
                 else if (double_g == max) h = 2 + r_dist - b_dist;
                 else h = 4 + g_dist - r_dist;
 
-                h = h * 60;
+                h *= 60;
                 if (h < 0) h += 360;
             }
         }
