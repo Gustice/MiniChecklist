@@ -31,14 +31,17 @@
                             Value="4" />
                 </Style>
             </StackPanel.Resources>
-            <Button Content="New"
-                    Command="{Binding NewCommand}" />
-            <Button Content="Save"
-                    Command="{Binding SaveCommand}" />
             <Button Content="Open"
                     Command="{Binding LoadCommand}" />
+            <Button Content="New"
+                    Command="{Binding NewCommand}" />
             <Button Content="Edit"
                     Command="{Binding EditCommand}" />
+            <Button Content="Finish"
+                    Command="{Binding FinishCommand}" />
+            <Button Content="Save"
+                    Command="{Binding SaveCommand}" />
+
         </StackPanel>
 
         <TextBlock Grid.Row="1"

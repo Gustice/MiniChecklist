@@ -46,6 +46,20 @@ namespace MiniChecklist.ViewModels
             }
         }
 
+        void ClearEmptyRecusively(ICollection<TodoTask> list)
+        {
+            List<TodoTask> temp = new List<TodoTask>();
+            temp.AddRange(list);
+            foreach (var item in temp)
+            {
+                if (string.IsNullOrEmpty( item.Task ) && item.SubList.Count == 0)
+                {
+                    list.Remove(item);
+                }
+                ClearEmptyRecusively(item.SubList);
+            }
+        }
+
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             foreach (var item in TodoList)
@@ -57,7 +71,7 @@ namespace MiniChecklist.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            throw new System.NotImplementedException();
+            ClearEmptyRecusively(TodoList);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;

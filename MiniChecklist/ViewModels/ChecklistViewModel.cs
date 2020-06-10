@@ -6,6 +6,7 @@ using Prism.Events;
 using System.Linq;
 using MiniChecklist.Events;
 using System.Collections.Generic;
+using System;
 
 namespace MiniChecklist.ViewModels
 {
@@ -51,6 +52,12 @@ namespace MiniChecklist.ViewModels
             FinishCommand = new DelegateCommand(OnFinish);
 
             ea.GetEvent<SetTasksEvent>().Subscribe(OnSetTasks);
+            ea.GetEvent<GetTasksEvent>().Subscribe(OnGetTasks);
+        }
+
+        private void OnGetTasks(List<TodoTask> obj)
+        {
+            obj.AddRange(TodoList);
         }
 
         private void OnSetTasks(List<TodoTask> obj)
