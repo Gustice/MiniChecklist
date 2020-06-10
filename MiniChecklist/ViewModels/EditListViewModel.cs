@@ -9,6 +9,8 @@ namespace MiniChecklist.ViewModels
 {
     public class EditListViewModel : BindableBase, INavigationAware
     {
+        private readonly List<TodoTask> _taskList;
+
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
         /// <summary> For Preview only </summary>
@@ -17,9 +19,10 @@ namespace MiniChecklist.ViewModels
 
         }
 
-        public EditListViewModel(IEventAggregator ea)
+        public EditListViewModel(IEventAggregator ea, List<TodoTask> taskList)
         {
             ea.GetEvent<SetTasksEvent>().Subscribe(OnSetTasks);
+            _taskList = taskList;
         }
 
         private void OnSetTasks(List<TodoTask> obj)
@@ -72,6 +75,8 @@ namespace MiniChecklist.ViewModels
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
             ClearEmptyRecusively(TodoList);
+            _taskList.Clear();
+            _taskList.AddRange(TodoList);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;

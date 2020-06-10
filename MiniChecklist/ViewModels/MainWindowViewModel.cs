@@ -59,6 +59,7 @@ namespace MiniChecklist.ViewModels
         SetTasksEvent _setTasksEvent;
         GetTasksEvent _getTasksEvent;
         IRegionManager _regionManager;
+        private List<TodoTask> _taskList;
 
         public MainWindowViewModel()
         {
@@ -71,10 +72,11 @@ namespace MiniChecklist.ViewModels
             FinishCommand = new DelegateCommand(OnFinish).ObservesCanExecute(() => CanFinish);
         }
 
-        public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader) : this()
+        public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, List<TodoTask> taskList) : this()
         {
             _taskFileReader = TaksFeilReader;
             _regionManager = regionManagerm;
+            _taskList = taskList;
 
             eventAggregator.GetEvent<LoadFileEvent>().Subscribe(OpenNewFileEvent);
             _setTasksEvent = eventAggregator.GetEvent<SetTasksEvent>();
@@ -137,7 +139,7 @@ namespace MiniChecklist.ViewModels
             foreach (var item in subList)
             {
                 list.Add($"{prepend}{item.Task} # {item.Description}");
-                list.AddRange(PrcessSublistsRecursively(item.SubList, level));
+                list.AddRange(PrcessSublistsRecursively(item.SubList, level+1));
             }
             return list;
         }
@@ -173,7 +175,9 @@ namespace MiniChecklist.ViewModels
 
             Caption = fileName;
 
-            _setTasksEvent.Publish(result.Todos);
+            _taskList.Clear();
+            _taskList.AddRange(result.Todos);
+            _setTasksEvent.Publish(_taskList);
             CanEdit = true;
         }
 

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using MiniChecklist.Defines;
 using MiniChecklist.Events;
 using MiniChecklist.FileReader;
+using MiniChecklist.ViewModels;
 using MiniChecklist.Views;
 using Prism.Events;
 using Prism.Ioc;
@@ -21,6 +23,7 @@ namespace MiniChecklist
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<ITaskFileReader, TaskFileReader>();
+            containerRegistry.RegisterSingleton<List<TodoTask>>();
         }
 
         /// <inheritdoc /> // 3. This will be called third

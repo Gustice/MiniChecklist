@@ -1,20 +1,20 @@
-﻿using MiniChecklist.ViewModels;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using Prism.Events;
-using System.Linq;
 using MiniChecklist.Events;
 using System.Collections.Generic;
-using System;
+using Prism.Regions;
 
 namespace MiniChecklist.ViewModels
 {
-    public class ChecklistViewModel : BindableBase
+    public class ChecklistViewModel : BindableBase, INavigationAware
     {
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
         private bool _hideFinished;
+        private readonly List<TodoTask> _taskList;
+
         public bool HideFinished
         {
             get => _hideFinished;
@@ -47,12 +47,13 @@ namespace MiniChecklist.ViewModels
             TodoList.Add(new TodoTask("I'm Done") { Done = true});
         }
 
-        public ChecklistViewModel(IEventAggregator ea)
+        public ChecklistViewModel(IEventAggregator ea, List<TodoTask> taskList)
         {
             FinishCommand = new DelegateCommand(OnFinish);
 
             ea.GetEvent<SetTasksEvent>().Subscribe(OnSetTasks);
             ea.GetEvent<GetTasksEvent>().Subscribe(OnGetTasks);
+            _taskList = taskList;
         }
 
         private void OnGetTasks(List<TodoTask> obj)
@@ -69,6 +70,18 @@ namespace MiniChecklist.ViewModels
         private void OnFinish()
         {
             System.Windows.Application.Current.Shutdown();
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            TodoList.Clear();
+            TodoList.AddRange(_taskList);
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext) => true;
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
         }
     }
 }
