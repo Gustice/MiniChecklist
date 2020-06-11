@@ -11,6 +11,7 @@ using MiniChecklist.Defines;
 using MiniChecklist.Views;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using MiniChecklist.Interfaces;
 
 namespace MiniChecklist.ViewModels
 {
@@ -59,7 +60,7 @@ namespace MiniChecklist.ViewModels
         SetTasksEvent _setTasksEvent;
         GetTasksEvent _getTasksEvent;
         IRegionManager _regionManager;
-        private List<TodoTask> _taskList;
+        private ObservableCollection<TodoTask> _taskList;
 
         public MainWindowViewModel()
         {
@@ -72,11 +73,11 @@ namespace MiniChecklist.ViewModels
             FinishCommand = new DelegateCommand(OnFinish).ObservesCanExecute(() => CanFinish);
         }
 
-        public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, List<TodoTask> taskList) : this()
+        public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, ITaskListRepo taskListRepo) : this()
         {
             _taskFileReader = TaksFeilReader;
             _regionManager = regionManagerm;
-            _taskList = taskList;
+            _taskList = taskListRepo.GetTaskList();
 
             eventAggregator.GetEvent<LoadFileEvent>().Subscribe(OpenNewFileEvent);
             _setTasksEvent = eventAggregator.GetEvent<SetTasksEvent>();
@@ -109,10 +110,10 @@ namespace MiniChecklist.ViewModels
             if (saveFile.ShowDialog() == true)
             {
                 List<string> list = new List<string>();
-                List<TodoTask> todos = new List<TodoTask>();
-                _getTasksEvent.Publish(todos);
+                //List<TodoTask> todos = new List<TodoTask>();
+                //_getTasksEvent.Publish(todos); // todo clear comments
                 int level = 1;
-                foreach (var item in todos)
+                foreach (var item in _taskList)
                 {
                     list.Add($"{item.Task} # {item.Description}");
                     list.AddRange(PrcessSublistsRecursively(item.SubList, level));
@@ -177,7 +178,7 @@ namespace MiniChecklist.ViewModels
 
             _taskList.Clear();
             _taskList.AddRange(result.Todos);
-            _setTasksEvent.Publish(_taskList);
+            //_setTasksEvent.Publish(_taskList);
             CanEdit = true;
         }
 

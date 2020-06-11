@@ -5,6 +5,7 @@ using Prism.Events;
 using MiniChecklist.Events;
 using System.Collections.Generic;
 using Prism.Regions;
+using MiniChecklist.Interfaces;
 
 namespace MiniChecklist.ViewModels
 {
@@ -13,7 +14,7 @@ namespace MiniChecklist.ViewModels
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
         private bool _hideFinished;
-        private readonly List<TodoTask> _taskList;
+        //private readonly List<TodoTask> _taskList;
 
         public bool HideFinished
         {
@@ -47,13 +48,13 @@ namespace MiniChecklist.ViewModels
             TodoList.Add(new TodoTask("I'm Done") { Done = true});
         }
 
-        public ChecklistViewModel(IEventAggregator ea, List<TodoTask> taskList)
+        public ChecklistViewModel(IEventAggregator ea, ITaskListRepo taskListRepo)
         {
             FinishCommand = new DelegateCommand(OnFinish);
 
             ea.GetEvent<SetTasksEvent>().Subscribe(OnSetTasks);
             ea.GetEvent<GetTasksEvent>().Subscribe(OnGetTasks);
-            _taskList = taskList;
+            TodoList = taskListRepo.GetTaskList();
         }
 
         private void OnGetTasks(List<TodoTask> obj)
@@ -74,8 +75,8 @@ namespace MiniChecklist.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            TodoList.Clear();
-            TodoList.AddRange(_taskList);
+            //TodoList.Clear();
+            //TodoList.AddRange(_taskList); // todo clear comments
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
