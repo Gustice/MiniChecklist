@@ -24,24 +24,25 @@
 
         <StackPanel Orientation="Horizontal">
             <StackPanel.Resources>
-                <Style TargetType="Button">
+                <Style TargetType="Button"
+                       BasedOn="{StaticResource {x:Type Button}}">
                     <Setter Property="Margin"
                             Value="4" />
                     <Setter Property="Padding"
                             Value="4" />
                 </Style>
             </StackPanel.Resources>
-            <Button Content="New"
-                    Command="{Binding NewCommand}"
-                    IsEnabled="False" />
-            <Button Content="Save"
-                    Command="{Binding SaveCommand}"
-                    IsEnabled="False" />
             <Button Content="Open"
                     Command="{Binding LoadCommand}" />
+            <Button Content="New"
+                    Command="{Binding NewCommand}" />
             <Button Content="Edit"
-                    Command="{Binding EditCommand}"
-                    IsEnabled="False" />
+                    Command="{Binding EditCommand}" />
+            <Button Content="Finish"
+                    Command="{Binding FinishCommand}" />
+            <Button Content="Save"
+                    Command="{Binding SaveCommand}" />
+
         </StackPanel>
 
         <TextBlock Grid.Row="1"
