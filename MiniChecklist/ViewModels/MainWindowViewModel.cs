@@ -56,11 +56,9 @@ namespace MiniChecklist.ViewModels
         public DelegateCommand EditCommand { get; }
         public DelegateCommand FinishCommand { get; }
 
-        public ITaskFileReader _taskFileReader { get; }
-        SetTasksEvent _setTasksEvent;
-        GetTasksEvent _getTasksEvent;
-        IRegionManager _regionManager;
-        private ObservableCollection<TodoTask> _taskList;
+        private readonly ITaskFileReader _taskFileReader;
+        private readonly IRegionManager _regionManager;
+        private readonly ObservableCollection<TodoTask> _taskList;
 
         public MainWindowViewModel()
         {
@@ -80,8 +78,6 @@ namespace MiniChecklist.ViewModels
             _taskList = taskListRepo.GetTaskList();
 
             eventAggregator.GetEvent<LoadFileEvent>().Subscribe(OpenNewFileEvent);
-            _setTasksEvent = eventAggregator.GetEvent<SetTasksEvent>();
-            _getTasksEvent = eventAggregator.GetEvent<GetTasksEvent>();
         }
 
         private void OnFinish()
@@ -110,8 +106,6 @@ namespace MiniChecklist.ViewModels
             if (saveFile.ShowDialog() == true)
             {
                 List<string> list = new List<string>();
-                //List<TodoTask> todos = new List<TodoTask>();
-                //_getTasksEvent.Publish(todos); // todo clear comments
                 int level = 1;
                 foreach (var item in _taskList)
                 {
@@ -119,17 +113,15 @@ namespace MiniChecklist.ViewModels
                     list.AddRange(PrcessSublistsRecursively(item.SubList, level));
                 }
 
-                using (StreamWriter saved = new StreamWriter(saveFile.FileName)) 
-                {
-                    if (saved == null)
-                        return;
+                using StreamWriter saved = new StreamWriter(saveFile.FileName);
+                if (saved == null)
+                    return;
 
-                    foreach (var item in list)
-                    {
-                        saved.WriteLine(item);
-                    }
-                    saved.Close();
+                foreach (var item in list)
+                {
+                    saved.WriteLine(item);
                 }
+                saved.Close();
             }
         }
 
@@ -178,7 +170,6 @@ namespace MiniChecklist.ViewModels
 
             _taskList.Clear();
             _taskList.AddRange(result.Todos);
-            //_setTasksEvent.Publish(_taskList);
             CanEdit = true;
         }
 

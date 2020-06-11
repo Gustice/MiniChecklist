@@ -14,7 +14,6 @@ namespace MiniChecklist.ViewModels
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
         private bool _hideFinished;
-        //private readonly List<TodoTask> _taskList;
 
         public bool HideFinished
         {
@@ -40,32 +39,21 @@ namespace MiniChecklist.ViewModels
             TodoList.Add(new TodoTask("CheckMe"));
             TodoList.Add(new TodoTask("DoMe"));
 
-            var task = new TodoTask("FinishMe");
-            task.Add(new TodoTask("Me also"));
-            task.Add(new TodoTask("And Me"));
-            task.Add(new TodoTask("And not to forget me"));
+            var task = new TodoTask("FinishMe")
+            {
+                new TodoTask("Me also"),
+                new TodoTask("And Me"),
+                new TodoTask("And not to forget me")
+            };
             TodoList.Add(task);
             TodoList.Add(new TodoTask("I'm Done") { Done = true});
         }
 
-        public ChecklistViewModel(IEventAggregator ea, ITaskListRepo taskListRepo)
+        public ChecklistViewModel(ITaskListRepo taskListRepo)
         {
             FinishCommand = new DelegateCommand(OnFinish);
 
-            ea.GetEvent<SetTasksEvent>().Subscribe(OnSetTasks);
-            ea.GetEvent<GetTasksEvent>().Subscribe(OnGetTasks);
             TodoList = taskListRepo.GetTaskList();
-        }
-
-        private void OnGetTasks(List<TodoTask> obj)
-        {
-            obj.AddRange(TodoList);
-        }
-
-        private void OnSetTasks(List<TodoTask> obj)
-        {
-            TodoList.Clear();
-            TodoList.AddRange(obj);
         }
 
         private void OnFinish()
@@ -75,8 +63,6 @@ namespace MiniChecklist.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            //TodoList.Clear();
-            //TodoList.AddRange(_taskList); // todo clear comments
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;

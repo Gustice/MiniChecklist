@@ -6,7 +6,7 @@ namespace MiniChecklist.Repositories
 {
     public class TaskListRepo : ITaskListRepo
     {
-        ObservableCollection<TodoTask> TaskList = new ObservableCollection<TodoTask>();
+        readonly ObservableCollection<TodoTask> TaskList = new ObservableCollection<TodoTask>();
 
         public ObservableCollection<TodoTask> GetTaskList() => TaskList;
     }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 namespace MiniChecklist.Events
 {
+    // todo: This can be removed if not further used
     class GetTasksEvent : PubSubEvent<List<TodoTask>> { }
 }
 

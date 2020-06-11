@@ -18,16 +18,9 @@ namespace MiniChecklist.ViewModels
 
         }
 
-        public EditListViewModel(IEventAggregator ea, ITaskListRepo taskListRepo)
+        public EditListViewModel(ITaskListRepo taskListRepo)
         {
-            ea.GetEvent<SetTasksEvent>().Subscribe(OnSetTasks);
             TodoList = taskListRepo.GetTaskList();
-        }
-
-        private void OnSetTasks(List<TodoTask> obj)
-        {
-            TodoList.Clear();
-            TodoList.AddRange(obj);
         }
 
         void AppendEmptyRecusively(ICollection<TodoTask> list)
@@ -74,8 +67,6 @@ namespace MiniChecklist.ViewModels
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
             ClearEmptyRecusively(TodoList);
-            //_taskList.Clear();
-            //_taskList.AddRange(TodoList);
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext) => true;
