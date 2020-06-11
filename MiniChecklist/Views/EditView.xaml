@@ -8,7 +8,7 @@
              xmlns:local="clr-namespace:MiniChecklist.Views"
              d:DataContext="{d:DesignInstance model:TodoTask, IsDesignTimeCreatable=True}"
              mc:Ignorable="d"
-             d:DesignHeight="200"
+             d:DesignHeight="280"
              d:DesignWidth="350">
     <UserControl.Resources>
         <converter:TaskButtonBackgroundConverter x:Key="ButtonBackGround" />
@@ -99,7 +99,7 @@
                      Text="{Binding Description, FallbackValue='This is the Description for the Task'}"
                      TextWrapping="Wrap"
                      Background="{Binding Path=Background, Converter={StaticResource DarkenConverter}}"
-                     Margin="4"
+                     Margin="4,0,4,0"
                      Padding="2"
                      FontSize="10">
             </TextBox>
@@ -110,6 +110,11 @@
                 <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    BorderThickness="1"
+                    BorderBrush="DarkGray"
+                    Margin="4" />
 
             <ItemsControl Grid.Column="1"
                           ItemsSource="{Binding SubList}">
