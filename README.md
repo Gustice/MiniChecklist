@@ -27,6 +27,12 @@ And Finish Last one! # Task Description for And Finish Last one!
 	and also other # Task Description for and also other 
 ```
 
+# Edit - View
+
+Since version 0.3 this comes with an Edit view, that works on the same data basis as the checklist. Be careful since there are currently no undo or abort commands implemented
+
+![Preview](Images/DemoChecklist_EditView.png)
+
 # Checklist - Syntax:
 
 Each line defines a Task, Each task can have a comment and may be a child of a previous task.
@@ -51,14 +57,17 @@ You can call this tool by passing target text-file which will be displayed direc
 This also comes in handy if you would like to manage your checklists otherwise, like with the [Link-Manager](https://github.com/Gustice/AHK-LinkManager)
 
 # Technical Info
-- Project is written in C# and targets .NET Core 3.0. This has no particular reason, the author just wanted to try it at least once
-- Project utilizes the [Prism-Framework](https://prismlibrary.com/docs/). Again this has no particular reason. Honestly saying it seems a bit of unpractical in this case.
+- Project is written in C# and targets .NET Core 3.0. This has no particular reason, the author just wanted to try it at least once to not find any advantages in this case whatsoever.
+- Project utilizes the [Prism-Framework](https://prismlibrary.com/docs/). Again this has no particular reason. Honestly saying it seems a bit of unpractical in this case, and seemed more to 
 
 # Credits
-- The gui is enabled by [AdonisUI](https://github.com/benruehl/adonis-ui)
+
+- The awesome GUI-style is powered by [AdonisUI](https://github.com/benruehl/adonis-ui)
 
 # Todo
 
 Several improvements are to be done (and could be added soon)
 - Special accentuation of important (or as important signed) tasks
-- Edit view, since the syntax got a little more complex
+- More convenient edit view, something with undo/redo commands abort command and shortcuts ...
+- Shortcut-Generator => Saves generated checklist with clickable link
+- Well it comes late but some unit tests would be great to harden the code for further improvements (sorry, no strict Test-Driven-Development here)

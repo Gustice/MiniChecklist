@@ -1,0 +1,129 @@
+﻿<UserControl x:Class="MiniChecklist.Views.EditView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:model="clr-namespace:MiniChecklist.ViewModels"
+             xmlns:converter="clr-namespace:MiniChecklist.Converter"
+             xmlns:local="clr-namespace:MiniChecklist.Views"
+             d:DataContext="{d:DesignInstance model:TodoTask, IsDesignTimeCreatable=True}"
+             mc:Ignorable="d"
+             d:DesignHeight="280"
+             d:DesignWidth="350">
+    <UserControl.Resources>
+        <converter:TaskButtonBackgroundConverter x:Key="ButtonBackGround" />
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <converter:ColorConverter x:Key="DarkenConverter"
+                                  Amount="0.15" />
+
+    </UserControl.Resources>
+
+    <Grid Visibility="{Binding Hide, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="4"
+                    Padding="4,0"
+                    Content="–"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Remove" />
+
+
+            <TextBox Grid.Row="0"
+                     Grid.Column="1"
+                     Text="{Binding Task}"
+                     Margin="4"
+                     ToolTip="Task-Name: Will be used as Button label" />
+
+            <Button Grid.Row="0"
+                    Grid.Column="2"
+                    Margin="4"
+                    Padding="4,0"
+                    Content="↑"
+                    ToolTip="Move Taks up"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Up" />
+
+            <Button Grid.Row="1"
+                    Grid.Column="2"
+                    Margin="4"
+                    Padding="4,0"
+                    Content="↓"
+                    ToolTip="Move Taks down"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Down" />
+
+            <Button Grid.Row="2"
+                    Grid.Column="0"
+                    Margin="4"
+                    Padding="4,0"
+                    Content="+" 
+                    ToolTip="Add Sibling to above Task"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Sibling"
+                    />
+            <Button Grid.Row="1"
+                    Grid.Column="0"
+                    HorizontalAlignment="Left"
+                    Margin="4"
+                    Padding="4,0"
+                    Content="↳"
+                    ToolTip="Add Child to above Task"
+                    Command="{Binding ManipulateTaskCommand}"
+                    CommandParameter="Child"
+                    />
+
+            <TextBox Grid.Row="1"
+                     Grid.Column="1"
+                     Grid.ColumnSpan="1"
+                     Grid.RowSpan="2"
+                     VerticalContentAlignment="Top"
+                     Text="{Binding Description, FallbackValue='This is the Description for the Task'}"
+                     TextWrapping="Wrap"
+                     Background="{Binding Path=Background, Converter={StaticResource DarkenConverter}}"
+                     Margin="4,0,4,0"
+                     Padding="2"
+                     FontSize="10">
+            </TextBox>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0"
+                    BorderThickness="1"
+                    BorderBrush="DarkGray"
+                    Margin="4" />
+
+            <ItemsControl Grid.Column="1"
+                          ItemsSource="{Binding SubList}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:EditView DataContext="{Binding}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </Grid>
+    </Grid>
+</UserControl>

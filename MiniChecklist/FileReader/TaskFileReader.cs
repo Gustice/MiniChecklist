@@ -7,7 +7,7 @@ namespace MiniChecklist.FileReader
 {
     public class TaskFileReader : ITaskFileReader
     {
-        Regex TabPreambel = new Regex("^\t+");
+        readonly Regex TabPreambel = new Regex("^\t+");
 
         public TaskFileResult ReadTasksFromFile(string path)
         {

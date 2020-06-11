@@ -6,7 +6,7 @@ using Prism.Mvvm;
 
 namespace MiniChecklist.ViewModels
 {
-    public class TodoTask : BindableBase, ICollection
+    public class TodoTask : BindableBase, IList
     {
         private bool _done;
         public bool Done
@@ -63,10 +63,24 @@ namespace MiniChecklist.ViewModels
         }
 
         public DelegateCommandBase CheckTaskCommand { get; }
+        public DelegateCommandBase ManipulateTaskCommand { get; }
 
-        public string Task { get; }
+        private string _task;
 
-        public string Description { get; set; }
+        private IList _parent;
+
+        public string Task
+        {
+            get => _task;
+            set => SetProperty(ref _task, value);
+        }
+
+        private string _description;
+        public string Description
+        {
+            get => _description;
+            set => SetProperty(ref _description, value);
+        }
 
         public ObservableCollection<TodoTask> SubList { get; } = new ObservableCollection<TodoTask>();
 
@@ -74,10 +88,12 @@ namespace MiniChecklist.ViewModels
         public TodoTask()
         {
 
-            Task = "Task";
-            Description = "This is the Description";
-            SubList.Add(new TodoTask("SubTask1"));
-            SubList.Add(new TodoTask("SubTask2"));
+            Task = "First level Task";
+            Description = "Description for first level Task";
+            SubList.Add(new TodoTask("Second level Task"));
+            var subTask = new TodoTask("Second level Task");
+            SubList.Add(subTask);
+            subTask.Done = true;
         }
 
         public TodoTask(string task) : this(task, "")
@@ -87,9 +103,64 @@ namespace MiniChecklist.ViewModels
 
         public TodoTask(string task, string description)
         {
+
             Task = task;
             Description = description;
             CheckTaskCommand = new DelegateCommand(OnCheckTask);
+            ManipulateTaskCommand = new DelegateCommand<string>(OnManipulateTask);
+        }
+
+        public void SetParent(IList parent)
+        {
+            _parent = parent;
+        }
+
+        private void OnManipulateTask(string command)
+        {
+            switch (command)
+            {
+                case "Sibling":
+                    var sibling = new TodoTask("", "");
+                    sibling.SetParent(_parent);
+                    _parent.Insert(_parent.IndexOf(this) + 1, sibling);
+                    break;
+
+                case "Child":
+                    var child = new TodoTask("", "");
+                    child.SetParent(this);
+
+                    this.Insert(0, child);
+                    break;
+
+                case "Remove":
+                    _parent.Remove(this);
+                    break;
+
+                case "Up":
+                    {
+                        int index = _parent.IndexOf(this);
+                        if (index == 0)
+                            break;
+
+                        _parent.Remove(this);
+                        _parent.Insert(--index, this);
+                    }
+                    break;
+
+                case "Down":
+                    {
+                        int index = _parent.IndexOf(this);
+                        if (index >= _parent.Count - 1)
+                            break;
+
+                        _parent.Remove(this);
+                        _parent.Insert(++index, this);
+                    }
+                    break;
+
+                default:
+                    throw new Exception($"Unknown Command '{command}'");
+            }
         }
 
         private void OnCheckTask()
@@ -104,13 +175,37 @@ namespace MiniChecklist.ViewModels
 
         public object SyncRoot => throw new NotImplementedException();
 
-        public void Add(TodoTask subtask)
+        public bool IsFixedSize => false;
+
+        public bool IsReadOnly => false;
+
+        public object this[int index]
+        {
+            get => _index;
+            set
+            {
+                _index = (int?)value;
+            }
+        }
+
+        private int? _index;
+
+        public int Add(TodoTask subtask)
         {
             SubList.Add(subtask);
+            return 0;
         }
 
         public void CopyTo(Array array, int index) => SubList.CopyTo((TodoTask[])array, index);
 
         public IEnumerator GetEnumerator() => SubList.GetEnumerator();
+
+        public int Add(object value) => Add((TodoTask)value);
+        public void Clear() => SubList.Clear();
+        public bool Contains(object value) => SubList.Contains((TodoTask)value);
+        public int IndexOf(object value) => SubList.IndexOf((TodoTask)value);
+        public void Insert(int index, object value) => SubList.Insert(index, (TodoTask)value);
+        public void Remove(object value) => SubList.Remove((TodoTask)value);
+        public void RemoveAt(int index) => SubList.RemoveAt(index);
     }
 }

@@ -1,19 +1,20 @@
-﻿using MiniChecklist.ViewModels;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
 using System.Collections.ObjectModel;
 using Prism.Events;
-using System.Linq;
 using MiniChecklist.Events;
 using System.Collections.Generic;
+using Prism.Regions;
+using MiniChecklist.Interfaces;
 
 namespace MiniChecklist.ViewModels
 {
-    public class ChecklistViewModel : BindableBase
+    public class ChecklistViewModel : BindableBase, INavigationAware
     {
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
         private bool _hideFinished;
+
         public bool HideFinished
         {
             get => _hideFinished;
@@ -38,30 +39,36 @@ namespace MiniChecklist.ViewModels
             TodoList.Add(new TodoTask("CheckMe"));
             TodoList.Add(new TodoTask("DoMe"));
 
-            var task = new TodoTask("FinishMe");
-            task.Add(new TodoTask("Me also"));
-            task.Add(new TodoTask("And Me"));
-            task.Add(new TodoTask("And not to forget me"));
+            var task = new TodoTask("FinishMe")
+            {
+                new TodoTask("Me also"),
+                new TodoTask("And Me"),
+                new TodoTask("And not to forget me")
+            };
             TodoList.Add(task);
             TodoList.Add(new TodoTask("I'm Done") { Done = true});
         }
 
-        public ChecklistViewModel(IEventAggregator ea)
+        public ChecklistViewModel(ITaskListRepo taskListRepo)
         {
             FinishCommand = new DelegateCommand(OnFinish);
 
-            ea.GetEvent<SetTasksEvent>().Subscribe(OnSetTasks);
-        }
-
-        private void OnSetTasks(List<TodoTask> obj)
-        {
-            TodoList.Clear();
-            TodoList.AddRange(obj);
+            TodoList = taskListRepo.GetTaskList();
         }
 
         private void OnFinish()
         {
             System.Windows.Application.Current.Shutdown();
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext) => true;
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
         }
     }
 }
