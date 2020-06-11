@@ -17,36 +17,36 @@
         <converter:BoolToVisibilityConverter x:Key="ButtonVisibility" />
     </UserControl.Resources>
 
-    <ScrollViewer VerticalScrollBarVisibility="Auto">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="auto" />
-            </Grid.RowDefinitions>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
-            <ItemsControl Grid.Row="0"
-                          ItemsSource="{Binding TodoList}">
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Center">
+            <Button Margin="8"
+                    HorizontalAlignment="Center"
+                    Padding="20,2"
+                    Content="Finsh All"
+                    Command="{Binding FinishCommand}" />
+            <CheckBox Margin="8"
+                      Name="Test"
+                      IsChecked="{Binding HideFinished}"
+                      Content="Hide Checked" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto">
+
+            <ItemsControl ItemsSource="{Binding TodoList}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <local:TaskView DataContext="{Binding}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-
-            <StackPanel Grid.Row="1"
-                        Orientation="Horizontal"
-                        HorizontalAlignment="Center">
-                <Button Margin="8"
-                        HorizontalAlignment="Center"
-                        Padding="20,2"
-                        Content="Finsh All"
-                        Command="{Binding FinishCommand}" />
-                <CheckBox Margin="8"
-                          Name="Test"
-                          IsChecked="{Binding HideFinished}"
-                          Content="Hide Checked" />
-            </StackPanel>
-
-        </Grid>
-    </ScrollViewer>
+        </ScrollViewer>
+    </Grid>
 </UserControl>
