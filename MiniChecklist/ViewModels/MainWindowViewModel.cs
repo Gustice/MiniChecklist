@@ -175,7 +175,10 @@ namespace MiniChecklist.ViewModels
 
         private void OnNew()
         {
-            throw new NotImplementedException();
+            _taskList.Clear();
+            _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(EditListView));
+            CanFinish = true;
+            CanEdit = false;
         }
 
         private void OpenNewFileEvent(string path)

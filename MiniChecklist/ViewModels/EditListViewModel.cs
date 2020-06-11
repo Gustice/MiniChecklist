@@ -1,6 +1,5 @@
-﻿using MiniChecklist.Events;
-using MiniChecklist.Interfaces;
-using Prism.Events;
+﻿using MiniChecklist.Interfaces;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.Generic;
@@ -12,6 +11,8 @@ namespace MiniChecklist.ViewModels
     {
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
+        public DelegateCommand InsertFirstCommand { get; }
+
         /// <summary> For Preview only </summary>
         public EditListViewModel()
         {
@@ -21,6 +22,14 @@ namespace MiniChecklist.ViewModels
         public EditListViewModel(ITaskListRepo taskListRepo)
         {
             TodoList = taskListRepo.GetTaskList();
+            InsertFirstCommand = new DelegateCommand(OnInsertFirst);
+        }
+
+        private void OnInsertFirst()
+        {
+            var item = new TodoTask("New", "");
+            item.SetParent(TodoList);
+            TodoList.Insert(0, item);
         }
 
         void AppendEmptyRecusively(ICollection<TodoTask> list)
