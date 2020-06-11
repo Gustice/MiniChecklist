@@ -103,7 +103,7 @@ namespace MiniChecklist.ViewModels
 
         public TodoTask(string task, string description)
         {
-            
+
             Task = task;
             Description = description;
             CheckTaskCommand = new DelegateCommand(OnCheckTask);
@@ -122,7 +122,7 @@ namespace MiniChecklist.ViewModels
                 case "Sibling":
                     var sibling = new TodoTask("", "");
                     sibling.SetParent(_parent);
-                    _parent.Insert(_parent.IndexOf(this)+1, sibling);
+                    _parent.Insert(_parent.IndexOf(this) + 1, sibling);
                     break;
 
                 case "Child":
@@ -137,15 +137,29 @@ namespace MiniChecklist.ViewModels
                     break;
 
                 case "Up":
+                    {
+                        int index = _parent.IndexOf(this);
+                        if (index == 0)
+                            break;
 
+                        _parent.Remove(this);
+                        _parent.Insert(--index, this);
+                    }
                     break;
 
                 case "Down":
+                    {
+                        int index = _parent.IndexOf(this);
+                        if (index >= _parent.Count - 1)
+                            break;
 
+                        _parent.Remove(this);
+                        _parent.Insert(++index, this);
+                    }
                     break;
 
                 default:
-                    break;
+                    throw new Exception($"Unknown Command '{command}'");
             }
         }
 
@@ -170,7 +184,8 @@ namespace MiniChecklist.ViewModels
             get => _index;
             set
             {
-                _index = (int?)value; }
+                _index = (int?)value;
+            }
         }
 
         private int? _index;
