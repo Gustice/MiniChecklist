@@ -12,37 +12,41 @@ using MiniChecklist.Views;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using MiniChecklist.Interfaces;
+using MiniChecklist.Services;
+using System.Windows;
 
 namespace MiniChecklist.ViewModels
 {
 
     public class MainWindowViewModel : BindableBase
     {
+        private readonly ITaskFileReader _taskFileReader;
+        private readonly IRegionManager _regionManager;
+        private readonly ObservableCollection<TodoTask> _taskList;
+        private readonly PathIndex _currentPath = new PathIndex();
+
         private string _caption;
+        private bool _canSave;
+        private bool _canEdit;
+        private bool _canFinish;
+
         public string Caption
         {
             get => _caption;
             set => SetProperty(ref _caption, value);
         }
-
-
-        private bool _canSave;
-
+        
         public bool CanSave
         {
             get { return _canSave; }
             set { SetProperty(ref _canSave, value); }
         }
 
-        private bool _canEdit;
-
         public bool CanEdit
         {
             get { return _canEdit; }
             set { SetProperty(ref _canEdit, value); }
         }
-
-        private bool _canFinish;
 
         public bool CanFinish
         {
@@ -55,10 +59,6 @@ namespace MiniChecklist.ViewModels
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand EditCommand { get; }
         public DelegateCommand FinishCommand { get; }
-
-        private readonly ITaskFileReader _taskFileReader;
-        private readonly IRegionManager _regionManager;
-        private readonly ObservableCollection<TodoTask> _taskList;
 
         public MainWindowViewModel()
         {
@@ -99,7 +99,7 @@ namespace MiniChecklist.ViewModels
         {
             var saveFile = new SaveFileDialog
             {
-                InitialDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                InitialDirectory = _currentPath.CurrentPath,
                 Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
             };
 
@@ -141,12 +141,13 @@ namespace MiniChecklist.ViewModels
         {
             var openFile = new OpenFileDialog
             {
-                InitialDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location),
+                InitialDirectory = _currentPath.CurrentPath,
                 Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*"
             };
 
             if (openFile.ShowDialog() == true)
             {
+                _currentPath.UpdateBase(openFile.FileName);
                 var result = _taskFileReader.ReadTasksFromFile(openFile.FileName);
                 UpdateView(result);
             }
@@ -183,8 +184,16 @@ namespace MiniChecklist.ViewModels
 
         private void OpenNewFileEvent(string path)
         {
-            var result = _taskFileReader.ReadTasksFromFile(path);
-            UpdateView(result);
+            try
+            {
+                _currentPath.UpdateBase(path);
+                var result = _taskFileReader.ReadTasksFromFile(path);
+                UpdateView(result);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show($"Error loading file {path}:\n" + e.Message, "Loading error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
