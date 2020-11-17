@@ -69,5 +69,8 @@ This also comes in handy if you would like to manage your checklists otherwise, 
 Several improvements are to be done (and could be added soon)
 - Special accentuation of important (or as important signed) tasks
 - More convenient edit view, something with undo/redo commands abort command and shortcuts ...
+  - Details Expand-Button should only be visible if there are any
+  - Subtasks should be only visible on demand
+- Save-File-Dialogue should start in the Folder the opened file is located
 - Shortcut-Generator => Saves generated checklist with clickable link
-- Well it comes late but some unit tests would be great to harden the code for further improvements (sorry, no strict Test-Driven-Development here)
+- Well it comes late, but some unit tests would be great to harden the code for further improvements (sorry, no strict Test-Driven-Development here)
