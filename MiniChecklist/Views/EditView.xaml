@@ -16,6 +16,15 @@
 
         <converter:ColorConverter x:Key="DarkenConverter"
                                   Amount="0.15" />
+        <Style TargetType="{x:Type Button}"
+               BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Margin"
+                    Value="4" />
+            <Setter Property="Padding"
+                    Value="4,0" />
+            <Setter Property="FontWeight"
+                    Value="Bold" />
+        </Style>
 
     </UserControl.Resources>
 
@@ -40,12 +49,9 @@
 
             <Button Grid.Row="0"
                     Grid.Column="0"
-                    Margin="4"
-                    Padding="4,0"
                     Content="–"
                     Command="{Binding ManipulateTaskCommand}"
                     CommandParameter="Remove" />
-
 
             <TextBox Grid.Row="0"
                      Grid.Column="1"
@@ -55,8 +61,6 @@
 
             <Button Grid.Row="0"
                     Grid.Column="2"
-                    Margin="4"
-                    Padding="4,0"
                     Content="↑"
                     ToolTip="Move Taks up"
                     Command="{Binding ManipulateTaskCommand}"
@@ -64,8 +68,6 @@
 
             <Button Grid.Row="1"
                     Grid.Column="2"
-                    Margin="4"
-                    Padding="4,0"
                     Content="↓"
                     ToolTip="Move Taks down"
                     Command="{Binding ManipulateTaskCommand}"
@@ -73,8 +75,6 @@
 
             <Button Grid.Row="2"
                     Grid.Column="0"
-                    Margin="4"
-                    Padding="4,0"
                     Content="+" 
                     ToolTip="Add Sibling to above Task"
                     Command="{Binding ManipulateTaskCommand}"
@@ -83,8 +83,6 @@
             <Button Grid.Row="1"
                     Grid.Column="0"
                     HorizontalAlignment="Left"
-                    Margin="4"
-                    Padding="4,0"
                     Content="↳"
                     ToolTip="Add Child to above Task"
                     Command="{Binding ManipulateTaskCommand}"

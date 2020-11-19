@@ -99,6 +99,20 @@ namespace MiniChecklist.ViewModels
             CanRedo = false;
         }
 
+        public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, ITaskListRepo taskListRepo) : this()
+        {
+            _taskFileReader = TaksFeilReader;
+            _regionManager = regionManagerm;
+            _taskList = taskListRepo.GetTaskList();
+
+            eventAggregator.GetEvent<LoadFileEvent>().Subscribe(OpenNewFileEvent);
+            eventAggregator.GetEvent<NewInkrementEvent>().Subscribe(OnNewInkrement);
+        }
+
+        private void OnNewInkrement()
+        {
+        }
+
         private void OnSelectPrevious()
         {
         }
@@ -109,15 +123,6 @@ namespace MiniChecklist.ViewModels
 
         private void OnCheckUncheck()
         {
-        }
-
-        public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, ITaskListRepo taskListRepo) : this()
-        {
-            _taskFileReader = TaksFeilReader;
-            _regionManager = regionManagerm;
-            _taskList = taskListRepo.GetTaskList();
-
-            eventAggregator.GetEvent<LoadFileEvent>().Subscribe(OpenNewFileEvent);
         }
 
         private void OnFinish()

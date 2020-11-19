@@ -1,5 +1,7 @@
-﻿using MiniChecklist.Interfaces;
+﻿using MiniChecklist.Events;
+using MiniChecklist.Interfaces;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.Generic;
@@ -9,6 +11,8 @@ namespace MiniChecklist.ViewModels
 {
     public class EditListViewModel : BindableBase, INavigationAware
     {
+        private readonly IEventAggregator _eventAggregator;
+
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
         public DelegateCommand InsertFirstCommand { get; }
@@ -19,17 +23,19 @@ namespace MiniChecklist.ViewModels
 
         }
 
-        public EditListViewModel(ITaskListRepo taskListRepo)
+        public EditListViewModel(IEventAggregator eventAggregator, ITaskListRepo taskListRepo)
         {
+            _eventAggregator = eventAggregator;
             TodoList = taskListRepo.GetTaskList();
             InsertFirstCommand = new DelegateCommand(OnInsertFirst);
         }
 
         private void OnInsertFirst()
         {
-            var item = new TodoTask("New", "");
+            var item = new TodoTask("New", "", _eventAggregator);
             item.SetParent(TodoList);
             TodoList.Insert(0, item);
+            _eventAggregator.GetEvent<NewInkrementEvent>().Publish();
         }
 
         void AppendEmptyRecusively(ICollection<TodoTask> list)
@@ -38,7 +44,7 @@ namespace MiniChecklist.ViewModels
             {
                 AppendEmptyRecusively(item.SubList);
             }
-            list.Add(new TodoTask("", ""));
+            list.Add(new TodoTask("", "", _eventAggregator));
         }
 
         void SetParenthoodRecursively(TodoTask task)

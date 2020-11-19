@@ -1,14 +1,26 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.ObjectModel;
+using MiniChecklist.Events;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 
 namespace MiniChecklist.ViewModels
 {
     public class TodoTask : BindableBase, IList
     {
+        private int? _index;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly NewInkrementEvent _newInkrementEvent;
+
         private bool _done;
+        private bool _implicitDone;
+        private bool _hide;
+        private string _task;
+        private IList _parent;
+
+
         public bool Done
         {
             get => _done || _implicitDone;
@@ -23,7 +35,6 @@ namespace MiniChecklist.ViewModels
             }
         }
 
-        private bool _implicitDone;
 
         public bool ImplicitDone
         {
@@ -41,7 +52,6 @@ namespace MiniChecklist.ViewModels
             }
         }
 
-        private bool _hide;
         public bool Hide
         {
             get => _hide;
@@ -62,12 +72,7 @@ namespace MiniChecklist.ViewModels
             }
         }
 
-        public DelegateCommandBase CheckTaskCommand { get; }
-        public DelegateCommandBase ManipulateTaskCommand { get; }
 
-        private string _task;
-
-        private IList _parent;
 
         public string Task
         {
@@ -82,6 +87,9 @@ namespace MiniChecklist.ViewModels
             set => SetProperty(ref _description, value);
         }
 
+        public DelegateCommandBase CheckTaskCommand { get; }
+        public DelegateCommandBase ManipulateTaskCommand { get; }
+
         public ObservableCollection<TodoTask> SubList { get; } = new ObservableCollection<TodoTask>();
 
         /// <summary> For Previewer Only</summary>
@@ -90,20 +98,20 @@ namespace MiniChecklist.ViewModels
 
             Task = "First level Task";
             Description = "Description for first level Task";
-            SubList.Add(new TodoTask("Second level Task"));
-            var subTask = new TodoTask("Another second level Task");
+            SubList.Add(new TodoTask("Second level Task", "", null));
+            var subTask = new TodoTask("Another second level Task", "", null);
             SubList.Add(subTask);
             subTask.Done = true;
         }
 
-        public TodoTask(string task) : this(task, "")
+        public TodoTask(IEventAggregator eventAggregator)
         {
-
+            _eventAggregator = eventAggregator;
+            _newInkrementEvent = eventAggregator.GetEvent<NewInkrementEvent>();
         }
 
-        public TodoTask(string task, string description)
+        public TodoTask(string task, string description, IEventAggregator ea) : this(ea)
         {
-
             Task = task;
             Description = description;
             CheckTaskCommand = new DelegateCommand(OnCheckTask);
@@ -120,13 +128,13 @@ namespace MiniChecklist.ViewModels
             switch (command)
             {
                 case "Sibling":
-                    var sibling = new TodoTask("", "");
+                    var sibling = new TodoTask("", "", _eventAggregator);
                     sibling.SetParent(_parent);
                     _parent.Insert(_parent.IndexOf(this) + 1, sibling);
                     break;
 
                 case "Child":
-                    var child = new TodoTask("", "");
+                    var child = new TodoTask("", "", _eventAggregator);
                     child.SetParent(this);
 
                     this.Insert(0, child);
@@ -161,6 +169,7 @@ namespace MiniChecklist.ViewModels
                 default:
                     throw new Exception($"Unknown Command '{command}'");
             }
+            _newInkrementEvent.Publish();
         }
 
         private void OnCheckTask()
@@ -188,7 +197,6 @@ namespace MiniChecklist.ViewModels
             }
         }
 
-        private int? _index;
 
         public int Add(TodoTask subtask)
         {

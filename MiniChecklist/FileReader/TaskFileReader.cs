@@ -1,4 +1,5 @@
 ﻿using MiniChecklist.ViewModels;
+using Prism.Events;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -8,6 +9,12 @@ namespace MiniChecklist.FileReader
     public class TaskFileReader : ITaskFileReader
     {
         readonly Regex TabPreambel = new Regex("^\t+");
+        private readonly IEventAggregator _eventAggregator;
+
+        public TaskFileReader(IEventAggregator eventAggregator)
+        {
+            _eventAggregator = eventAggregator;
+        }
 
         public TaskFileResult ReadTasksFromFile(string path)
         {
@@ -91,18 +98,18 @@ namespace MiniChecklist.FileReader
             return list;
         }
 
-        private static TodoTask ProcessLine(string cleared)
+        private TodoTask ProcessLine(string cleared)
         {
             TodoTask task = null;
             var parts = cleared.Split('#');
             if (parts.Length == 2)
             {
-                task = new TodoTask(parts[0], parts[1]);
+                task = new TodoTask(parts[0], parts[1], _eventAggregator);
 
             }
             else if (parts.Length == 1)
             {
-                task = new TodoTask(parts[0]);
+                task = new TodoTask(parts[0], "", _eventAggregator);
             }
 
             return task;

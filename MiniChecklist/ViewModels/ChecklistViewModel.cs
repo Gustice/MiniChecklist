@@ -36,17 +36,17 @@ namespace MiniChecklist.ViewModels
         /// <summary> For Preview only </summary>
         public ChecklistViewModel()
         {
-            TodoList.Add(new TodoTask("CheckMe"));
-            TodoList.Add(new TodoTask("DoMe"));
+            TodoList.Add(new TodoTask("CheckMe", "", null));
+            TodoList.Add(new TodoTask("DoMe", "", null));
 
-            var task = new TodoTask("FinishMe")
+            var task = new TodoTask("FinishMe", "", null)
             {
-                new TodoTask("Me also"),
-                new TodoTask("And Me"),
-                new TodoTask("And not to forget me")
+                new TodoTask("Me also", "", null),
+                new TodoTask("And Me", "", null),
+                new TodoTask("And not to forget me", "", null)
             };
             TodoList.Add(task);
-            TodoList.Add(new TodoTask("I'm Done") { Done = true});
+            TodoList.Add(new TodoTask("I'm Done", "", null) { Done = true});
         }
 
         public ChecklistViewModel(ITaskListRepo taskListRepo)
