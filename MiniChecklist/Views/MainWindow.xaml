@@ -30,6 +30,13 @@
         <KeyBinding Command="{Binding SelectNextCommand}" Key="Down" />
         <KeyBinding Command="{Binding SelectPreviousCommand}" Key="Up" />
         <KeyBinding Command="{Binding CheckUncheckCommand}" Key="Space" />
+        <KeyBinding Command="{Binding LoadCommand}" Gesture="Control+O" />
+        <KeyBinding Command="{Binding NewCommand}" Gesture="Control+N" />
+        <KeyBinding Command="{Binding SaveCommand}" Gesture="Control+S" />
+        <KeyBinding Command="{Binding UndoCommand}" Gesture="Control+Z" />
+        <KeyBinding Command="{Binding RedoCommand}" Gesture="Control+Shift+Z" />
+        <KeyBinding Command="{Binding EditCommand}" Gesture="Control+E" />
+        <KeyBinding Command="{Binding FinishCommand}" Gesture="Control+F" />
     </Window.InputBindings>
 
     <Grid Margin="4">
@@ -58,31 +65,31 @@
                 </Style>
             </StackPanel.Resources>
             <Button Command="{Binding LoadCommand}"
-                    ToolTip="Load File">
+                    ToolTip="Load File (Control+O)">
                 <fa:ImageAwesome Icon="FolderOutlinepenOutline" />
             </Button>
             <Button Command="{Binding NewCommand}"
-                    ToolTip="Create new File">
+                    ToolTip="Create new File (Control+N)">
                 <fa:ImageAwesome Icon="FileOutline" />
             </Button>
             <Button Command="{Binding EditCommand}"
-                    ToolTip="Edit File">
+                    ToolTip="Edit File (Control+E)">
                 <fa:ImageAwesome Icon="Edit" />
             </Button>
             <Button Command="{Binding FinishCommand}"
-                    ToolTip="Finish Edit">
+                    ToolTip="Finish Edit (Control+F)">
                 <fa:ImageAwesome Icon="List" />
             </Button>
             <Button Command="{Binding SaveCommand}"
-                    ToolTip="Save">
+                    ToolTip="Save File / Save as ... (Control+S)">
                 <fa:ImageAwesome Icon="Save" />
             </Button>
             <Button Command="{Binding UndoCommand}"
-                    ToolTip="Undo change">
+                    ToolTip="Undo change (Control+Z)">
                 <fa:ImageAwesome Icon="Undo" />
             </Button>
             <Button Command="{Binding RedoCommand}"
-                    ToolTip="Redo change">
+                    ToolTip="Redo change (Control+Shift+Z)">
                 <fa:ImageAwesome Icon="Repeat" />
             </Button>
         </StackPanel>
