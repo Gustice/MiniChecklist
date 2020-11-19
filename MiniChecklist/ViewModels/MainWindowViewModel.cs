@@ -29,6 +29,8 @@ namespace MiniChecklist.ViewModels
         private bool _canSave;
         private bool _canEdit;
         private bool _canFinish;
+        private bool _canUndo;
+        private bool _canRedo;
 
         public string Caption
         {
@@ -54,11 +56,29 @@ namespace MiniChecklist.ViewModels
             set { SetProperty(ref _canFinish, value); }
         }
 
+        public bool CanUndo
+        {
+            get { return _canUndo; }
+            set { SetProperty(ref _canUndo, value); }
+        }
+
+        public bool CanRedo
+        {
+            get { return _canRedo; }
+            set { SetProperty(ref _canRedo, value); }
+        }
+
         public DelegateCommand NewCommand { get; }
         public DelegateCommand LoadCommand { get; }
         public DelegateCommand SaveCommand { get; }
         public DelegateCommand EditCommand { get; }
         public DelegateCommand FinishCommand { get; }
+        public DelegateCommand UndoCommand { get; }
+        public DelegateCommand RedoCommand { get; }
+        
+        public DelegateCommand SelectNextCommand { get; }
+        public DelegateCommand SelectPreviousCommand { get; }
+        public DelegateCommand CheckUncheckCommand { get; }
 
         public MainWindowViewModel()
         {
@@ -69,6 +89,26 @@ namespace MiniChecklist.ViewModels
             SaveCommand = new DelegateCommand(OnSave).ObservesCanExecute(() => CanSave);
             EditCommand = new DelegateCommand(OnEdit).ObservesCanExecute(() => CanEdit);
             FinishCommand = new DelegateCommand(OnFinish).ObservesCanExecute(() => CanFinish);
+            UndoCommand = new DelegateCommand(OnUndo).ObservesCanExecute(() => CanUndo);
+            RedoCommand = new DelegateCommand(OnRedo).ObservesCanExecute(() => CanRedo);
+            SelectNextCommand = new DelegateCommand(OnSelectNext);
+            SelectPreviousCommand = new DelegateCommand(OnSelectPrevious);
+            CheckUncheckCommand = new DelegateCommand(OnCheckUncheck);
+        }
+
+        private void OnSelectPrevious()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnSelectNext()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void OnCheckUncheck()
+        {
+            throw new NotImplementedException();
         }
 
         public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, ITaskListRepo taskListRepo) : this()
@@ -93,6 +133,16 @@ namespace MiniChecklist.ViewModels
             _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(EditListView));
             CanFinish = true;
             CanEdit = false;
+        }
+
+        private void OnUndo()
+        { 
+
+        }
+
+        private void OnRedo()
+        { 
+
         }
 
         private void OnSave()

@@ -26,6 +26,11 @@
                     Value="2" />
         </Style>-->
     </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding SelectNextCommand}" Key="Down" />
+        <KeyBinding Command="{Binding SelectPreviousCommand}" Key="Up" />
+        <KeyBinding Command="{Binding CheckUncheckCommand}" Key="Space" />
+    </Window.InputBindings>
 
     <Grid Margin="8">
         <Grid.RowDefinitions>
@@ -54,7 +59,7 @@
             </StackPanel.Resources>
             <Button Command="{Binding LoadCommand}"
                     ToolTip="Load File">
-                <fa:ImageAwesome Icon="FolderOutlinepenOutline"/>
+                <fa:ImageAwesome Icon="FolderOutlinepenOutline" />
             </Button>
             <Button Command="{Binding NewCommand}"
                     ToolTip="Create new File">
@@ -62,16 +67,24 @@
             </Button>
             <Button Command="{Binding EditCommand}"
                     ToolTip="Edit File">
-                <fa:ImageAwesome Icon="Pencil" />
+                <fa:ImageAwesome Icon="Edit" />
             </Button>
             <Button Command="{Binding FinishCommand}"
                     ToolTip="Finish Edit">
                 <fa:ImageAwesome Icon="List" />
             </Button>
-            <Button Command="{Binding SaveCommand}">
+            <Button Command="{Binding SaveCommand}"
+                    ToolTip="Save">
                 <fa:ImageAwesome Icon="Save" />
             </Button>
-
+            <Button Command="{Binding Undo}"
+                    ToolTip="Undo change">
+                <fa:ImageAwesome Icon="Undo" />
+            </Button>
+            <Button Command="{Binding Redo}"
+                    ToolTip="Redo change">
+                <fa:ImageAwesome Icon="Repeat" />
+            </Button>
         </StackPanel>
 
         <TextBlock Grid.Row="1"

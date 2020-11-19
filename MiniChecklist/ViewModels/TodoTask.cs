@@ -91,7 +91,7 @@ namespace MiniChecklist.ViewModels
             Task = "First level Task";
             Description = "Description for first level Task";
             SubList.Add(new TodoTask("Second level Task"));
-            var subTask = new TodoTask("Second level Task");
+            var subTask = new TodoTask("Another second level Task");
             SubList.Add(subTask);
             subTask.Done = true;
         }
