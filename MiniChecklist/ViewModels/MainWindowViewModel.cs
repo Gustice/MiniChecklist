@@ -94,21 +94,21 @@ namespace MiniChecklist.ViewModels
             SelectNextCommand = new DelegateCommand(OnSelectNext);
             SelectPreviousCommand = new DelegateCommand(OnSelectPrevious);
             CheckUncheckCommand = new DelegateCommand(OnCheckUncheck);
+
+            CanUndo = false;
+            CanRedo = false;
         }
 
         private void OnSelectPrevious()
         {
-            throw new NotImplementedException();
         }
 
         private void OnSelectNext()
         {
-            throw new NotImplementedException();
         }
 
         private void OnCheckUncheck()
         {
-            throw new NotImplementedException();
         }
 
         public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, ITaskListRepo taskListRepo) : this()
@@ -222,6 +222,8 @@ namespace MiniChecklist.ViewModels
             _taskList.Clear();
             _taskList.AddRange(result.Todos);
             CanEdit = true;
+            CanUndo = false;
+            CanRedo = false;
         }
 
         private void OnNew()

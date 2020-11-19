@@ -32,7 +32,7 @@
         <KeyBinding Command="{Binding CheckUncheckCommand}" Key="Space" />
     </Window.InputBindings>
 
-    <Grid Margin="8">
+    <Grid Margin="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -77,18 +77,18 @@
                     ToolTip="Save">
                 <fa:ImageAwesome Icon="Save" />
             </Button>
-            <Button Command="{Binding Undo}"
+            <Button Command="{Binding UndoCommand}"
                     ToolTip="Undo change">
                 <fa:ImageAwesome Icon="Undo" />
             </Button>
-            <Button Command="{Binding Redo}"
+            <Button Command="{Binding RedoCommand}"
                     ToolTip="Redo change">
                 <fa:ImageAwesome Icon="Repeat" />
             </Button>
         </StackPanel>
 
         <TextBlock Grid.Row="1"
-                   Padding="5"
+                   Padding="4"
                    FontWeight="Bold"
                    FontSize="14"
                    HorizontalAlignment="Center"

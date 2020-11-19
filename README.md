@@ -63,7 +63,7 @@ This also comes in handy if you would like to manage your checklists otherwise, 
 # Credits
 
 - The awesome GUI-style is powered by [AdonisUI](https://github.com/benruehl/adonis-ui)
-- The Icons for the Buttons are from [Font Awesome](www.fontawesome.com) (see also [github link](https://github.com/charri/Font-Awesome-WPF/blob/master/README-WPF.md))
+- The Icons for the Buttons are from [FontAwesome](https://fontawesome.com/) (see also [github link](https://github.com/charri/Font-Awesome-WPF/blob/master/README-WPF.md))
 - App-Icon is from [flaticon.com](https://www.flaticon.com/authors/freepik)
 
 # Todo
