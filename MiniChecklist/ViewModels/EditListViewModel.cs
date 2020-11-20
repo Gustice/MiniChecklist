@@ -4,6 +4,7 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -15,7 +16,7 @@ namespace MiniChecklist.ViewModels
 
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
-        public DelegateCommand InsertFirstCommand { get; }
+        public DelegateCommandBase InsertFirstCommand { get; }
 
         /// <summary> For Preview only </summary>
         public EditListViewModel()
@@ -27,15 +28,31 @@ namespace MiniChecklist.ViewModels
         {
             _eventAggregator = eventAggregator;
             TodoList = taskListRepo.GetTaskList();
-            InsertFirstCommand = new DelegateCommand(OnInsertFirst);
+            InsertFirstCommand = new DelegateCommand<string>(OnInsertFirst);
         }
 
-        private void OnInsertFirst()
+        private void OnInsertFirst(string command)
         {
-            var item = new TodoTask("New", "", _eventAggregator);
-            item.SetParent(TodoList);
-            TodoList.Insert(0, item);
             _eventAggregator.GetEvent<NewInkrementEvent>().Publish();
+
+            TodoTask item;
+            switch (command)
+            {
+                case "Append":
+                    item = new TodoTask("", "", _eventAggregator);
+                    item.SetParent(TodoList);
+                    TodoList.Add(item);
+                    break;
+
+                case "Prepend":
+                    item = new TodoTask("", "", _eventAggregator);
+                    item.SetParent(TodoList);
+                    TodoList.Insert(0, item);
+                    break;
+
+                default:
+                    throw new Exception($"Unknown Command '{command}'");
+            }
         }
 
         void AppendEmptyRecusively(ICollection<TodoTask> list)

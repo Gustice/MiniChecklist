@@ -19,29 +19,33 @@ namespace MiniChecklist.FileReader
         public TaskFileResult ReadTasksFromFile(string path)
         {
             var list = new List<TodoTask>();
-            var result = new TaskFileResult(path, ReadResult.FileNotFound);
 
             if (!File.Exists(path))
-                return result;
+                return new TaskFileResult(path, ReadResult.FileNotFound);
 
-            result.ChangeStatus(ReadResult.NoContent);
             var lines = File.ReadAllLines(path);
             if ((lines.Length == 0) || (lines.Length == 1 && string.IsNullOrEmpty(lines[0])))
-                return result;
+                return new TaskFileResult(path, ReadResult.NoContent);
 
-            result.ChangeStatus(ReadResult.WrongFormat);
             if (TabPreambel.Match(lines[0]).Value.Length > 0)
-                return result;
+                return new TaskFileResult(path, ReadResult.WrongFormat);
 
             list.AddRange(ProcessLines(lines));
 
-            result.ChangeStatus(ReadResult.ReadSuccess);
+            var result = new TaskFileResult(path, ReadResult.ReadSuccess);
             result.AddData(list);
-
             return result;
         }
 
-        private List<TodoTask> ProcessLines(string[] lines)
+        public TaskFileResult ReadTasksFromList(List<string> list)
+        {
+            var result = new TaskFileResult("", ReadResult.ReadSuccess);
+            result.AddData(ProcessLines(list));
+
+            return result;
+        }
+        
+        private List<TodoTask> ProcessLines(IEnumerable<string> lines)
         {
             var list = new List<TodoTask>();
 

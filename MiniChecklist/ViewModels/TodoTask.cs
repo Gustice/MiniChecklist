@@ -126,6 +126,7 @@ namespace MiniChecklist.ViewModels
 
         private void OnManipulateTask(string command)
         {
+            _newInkrementEvent.Publish();
             switch (command)
             {
                 case "Sibling":
@@ -170,8 +171,8 @@ namespace MiniChecklist.ViewModels
                 default:
                     throw new Exception($"Unknown Command '{command}'");
             }
-            _newInkrementEvent.Publish();
         }
+
 
         private void OnCheckTask()
         {
@@ -220,5 +221,7 @@ namespace MiniChecklist.ViewModels
         public void Insert(int index, object value) => SubList.Insert(index, (TodoTask)value);
         public void Remove(object value) => SubList.Remove((TodoTask)value);
         public void RemoveAt(int index) => SubList.RemoveAt(index);
+
+        public override string ToString() => $"{Task} # {Description}";
     }
 }

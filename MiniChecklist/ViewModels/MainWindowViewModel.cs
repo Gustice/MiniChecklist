@@ -29,8 +29,6 @@ namespace MiniChecklist.ViewModels
         private bool _canSave;
         private bool _canEdit;
         private bool _canFinish;
-        private bool _canUndo;
-        private bool _canRedo;
 
         public string Caption
         {
@@ -56,17 +54,9 @@ namespace MiniChecklist.ViewModels
             set { SetProperty(ref _canFinish, value); }
         }
 
-        public bool CanUndo
-        {
-            get { return _canUndo; }
-            set { SetProperty(ref _canUndo, value); }
-        }
+        public InkrementHistory UndoStack { get; } = new InkrementHistory();
+        public InkrementHistory RedoStack { get; } = new InkrementHistory();
 
-        public bool CanRedo
-        {
-            get { return _canRedo; }
-            set { SetProperty(ref _canRedo, value); }
-        }
 
         public DelegateCommand NewCommand { get; }
         public DelegateCommand LoadCommand { get; }
@@ -89,14 +79,11 @@ namespace MiniChecklist.ViewModels
             SaveCommand = new DelegateCommand(OnSave).ObservesCanExecute(() => CanSave);
             EditCommand = new DelegateCommand(OnEdit).ObservesCanExecute(() => CanEdit);
             FinishCommand = new DelegateCommand(OnFinish).ObservesCanExecute(() => CanFinish);
-            UndoCommand = new DelegateCommand(OnUndo).ObservesCanExecute(() => CanUndo);
-            RedoCommand = new DelegateCommand(OnRedo).ObservesCanExecute(() => CanRedo);
+            UndoCommand = new DelegateCommand(OnUndo).ObservesCanExecute(() => UndoStack.CanPop);
+            RedoCommand = new DelegateCommand(OnRedo).ObservesCanExecute(() => RedoStack.CanPop);
             SelectNextCommand = new DelegateCommand(OnSelectNext);
             SelectPreviousCommand = new DelegateCommand(OnSelectPrevious);
             CheckUncheckCommand = new DelegateCommand(OnCheckUncheck);
-
-            CanUndo = false;
-            CanRedo = false;
         }
 
         public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, ITaskListRepo taskListRepo) : this()
@@ -111,18 +98,36 @@ namespace MiniChecklist.ViewModels
 
         private void OnNewInkrement()
         {
+            var list = CollectAllTaskItems();
+            UndoStack.Push(list);
+            RedoStack.Clear();
+        }
+
+        private List<string> CollectAllTaskItems()
+        {
+            List<string> list = new List<string>();
+            foreach (var item in _taskList) 
+            {
+                list.Add(item.ToString());
+                list.AddRange(PrcessSublistsRecursively(item.SubList));
+            }
+
+            return list;
         }
 
         private void OnSelectPrevious()
         {
+
         }
 
         private void OnSelectNext()
         {
+
         }
 
         private void OnCheckUncheck()
         {
+
         }
 
         private void OnFinish()
@@ -131,6 +136,9 @@ namespace MiniChecklist.ViewModels
             CanFinish = false;
             CanEdit = true;
             CanSave = true;
+
+            UndoStack.Clear();
+            RedoStack.Clear();
         }
 
         private void OnEdit()
@@ -139,15 +147,23 @@ namespace MiniChecklist.ViewModels
             CanFinish = true;
             CanEdit = false;
         }
-
+               
         private void OnUndo()
-        { 
-
+        {
+            RedoStack.Push(CollectAllTaskItems());
+            var inkrement = UndoStack.Pop();
+            
+            var result = _taskFileReader.ReadTasksFromList(inkrement);
+            UpdateView(result);
         }
 
         private void OnRedo()
-        { 
+        {
+            var inkrement = RedoStack.Pop();
+            UndoStack.Push(inkrement);
 
+            var result = _taskFileReader.ReadTasksFromList(inkrement);
+            UpdateView(result);
         }
 
         private void OnSave()
@@ -160,14 +176,7 @@ namespace MiniChecklist.ViewModels
 
             if (saveFile.ShowDialog() == true)
             {
-                List<string> list = new List<string>();
-                int level = 1;
-                foreach (var item in _taskList)
-                {
-                    list.Add($"{item.Task} # {item.Description}");
-                    list.AddRange(PrcessSublistsRecursively(item.SubList, level));
-                }
-
+                var list = CollectAllTaskItems();
                 using StreamWriter saved = new StreamWriter(saveFile.FileName);
                 if (saved == null)
                     return;
@@ -180,13 +189,13 @@ namespace MiniChecklist.ViewModels
             }
         }
 
-        private List<string> PrcessSublistsRecursively(ObservableCollection<TodoTask> subList, int level)
+        private List<string> PrcessSublistsRecursively(ObservableCollection<TodoTask> subList, int level = 1)
         {
             string prepend = "".PadLeft(level, '\t');
             List<string> list = new List<string>();
             foreach (var item in subList)
             {
-                list.Add($"{prepend}{item.Task} # {item.Description}");
+                list.Add($"{prepend}{item.ToString()}");
                 list.AddRange(PrcessSublistsRecursively(item.SubList, level+1));
             }
             return list;
@@ -227,8 +236,6 @@ namespace MiniChecklist.ViewModels
             _taskList.Clear();
             _taskList.AddRange(result.Todos);
             CanEdit = true;
-            CanUndo = false;
-            CanRedo = false;
         }
 
         private void OnNew()
@@ -237,6 +244,9 @@ namespace MiniChecklist.ViewModels
             _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(EditListView));
             CanFinish = true;
             CanEdit = false;
+
+            UndoStack.Clear();
+            RedoStack.Clear();
         }
 
         private void OpenNewFileEvent(string path)
@@ -246,6 +256,9 @@ namespace MiniChecklist.ViewModels
                 _currentPath.UpdateBase(path);
                 var result = _taskFileReader.ReadTasksFromFile(path);
                 UpdateView(result);
+
+                UndoStack.Clear();
+                RedoStack.Clear();
             }
             catch (Exception e)
             {
