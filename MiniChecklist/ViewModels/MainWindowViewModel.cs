@@ -18,7 +18,6 @@ using NLog;
 
 namespace MiniChecklist.ViewModels
 {
-
     public class MainWindowViewModel : BindableBase
     {
         private readonly ITaskFileReader _taskFileReader;
@@ -163,6 +162,7 @@ namespace MiniChecklist.ViewModels
             
             var result = _taskFileReader.ReadTasksFromList(inkrement);
             UpdateView(result);
+            _eventAggregator.GetEvent<RefreshConnectionsEvent>().Publish();
             _eventAggregator.GetEvent<NewInkrementEvent>().Subscribe(OnNewInkrement);
         }
 
@@ -174,6 +174,7 @@ namespace MiniChecklist.ViewModels
 
             var result = _taskFileReader.ReadTasksFromList(inkrement);
             UpdateView(result);
+            _eventAggregator.GetEvent<RefreshConnectionsEvent>().Publish();
             _eventAggregator.GetEvent<NewInkrementEvent>().Subscribe(OnNewInkrement);
         }
 

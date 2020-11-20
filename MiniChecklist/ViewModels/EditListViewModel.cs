@@ -29,6 +29,13 @@ namespace MiniChecklist.ViewModels
             _eventAggregator = eventAggregator;
             TodoList = taskListRepo.GetTaskList();
             InsertFirstCommand = new DelegateCommand<string>(OnInsertFirst);
+
+            eventAggregator.GetEvent<RefreshConnectionsEvent>().Subscribe(OnRefreshConnections);
+        }
+
+        private void OnRefreshConnections()
+        {
+            RefreshConnections();
         }
 
         private void OnInsertFirst(string command)
@@ -88,6 +95,11 @@ namespace MiniChecklist.ViewModels
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            RefreshConnections();
+        }
+
+        private void RefreshConnections()
         {
             foreach (var item in TodoList)
             {

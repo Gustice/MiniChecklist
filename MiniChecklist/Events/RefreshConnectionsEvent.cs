@@ -2,7 +2,7 @@
 
 namespace MiniChecklist.Events
 {
-    class NewInkrementEvent : PubSubEvent
+    class RefreshConnectionsEvent : PubSubEvent
     {
     }
 }
