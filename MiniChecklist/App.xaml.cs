@@ -6,6 +6,7 @@ using MiniChecklist.FileReader;
 using MiniChecklist.Interfaces;
 using MiniChecklist.Repositories;
 using MiniChecklist.Views;
+using NLog;
 using Prism.Events;
 using Prism.Ioc;
 using Prism.Regions;
@@ -19,11 +20,14 @@ namespace MiniChecklist
     {
         // Note 1. Initialize(); will be called first, 5. OnInitialized(); will be called last
 
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         /// <inheritdoc /> // 2. This will be called second
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterSingleton<ITaskFileReader, TaskFileReader>();
             containerRegistry.RegisterSingleton<ITaskListRepo, TaskListRepo>();
+            containerRegistry.RegisterInstance<ILogger>(_logger);
         }
 
         /// <inheritdoc /> // 3. This will be called third
@@ -55,5 +59,13 @@ namespace MiniChecklist
 
             regionManager.RequestNavigate(RegionNames.MainRegion, nameof(ChecklistView));
         }
+
+
+        protected override void OnInitialized()
+        {
+            base.OnInitialized();
+
+            _logger.Info("App Initialized");
     }
+}
 }

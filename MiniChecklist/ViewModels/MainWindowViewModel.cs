@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 using MiniChecklist.Interfaces;
 using MiniChecklist.Services;
 using System.Windows;
+using NLog;
 
 namespace MiniChecklist.ViewModels
 {
@@ -21,6 +22,7 @@ namespace MiniChecklist.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private readonly ITaskFileReader _taskFileReader;
+        private readonly ILogger _logger;
         private readonly IRegionManager _regionManager;
         private readonly IEventAggregator _eventAggregator;
         private readonly ObservableCollection<TodoTask> _taskList;
@@ -87,8 +89,9 @@ namespace MiniChecklist.ViewModels
             CheckUncheckCommand = new DelegateCommand(OnCheckUncheck);
         }
 
-        public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, ITaskListRepo taskListRepo) : this()
+        public MainWindowViewModel(ILogger logger, IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, ITaskListRepo taskListRepo) : this()
         {
+            _logger = logger;
             _regionManager = regionManagerm;
             _eventAggregator = eventAggregator;
             _taskFileReader = TaksFeilReader;
@@ -211,6 +214,8 @@ namespace MiniChecklist.ViewModels
 
         private void OnLoad()
         {
+            _logger.Debug("Starting File-Load Dialogue");
+
             var openFile = new OpenFileDialog
             {
                 InitialDirectory = _currentPath.CurrentPath,
@@ -219,6 +224,7 @@ namespace MiniChecklist.ViewModels
 
             if (openFile.ShowDialog() == true)
             {
+                _logger.Debug($"Loading new File '{openFile.FileName}'");
                 _currentPath.UpdateBase(openFile.FileName);
                 var result = _taskFileReader.ReadTasksFromFile(openFile.FileName);
                 UpdateView(result);
@@ -248,6 +254,7 @@ namespace MiniChecklist.ViewModels
 
         private void OnNew()
         {
+            _logger.Debug("Starting new File");
             _taskList.Clear();
             _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(EditListView));
             CanFinish = true;
@@ -259,6 +266,8 @@ namespace MiniChecklist.ViewModels
 
         private void OpenNewFileEvent(string path)
         {
+            _logger.Debug($"Open new File '{path}'");
+
             try
             {
                 _currentPath.UpdateBase(path);
