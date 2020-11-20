@@ -13,6 +13,7 @@
     <UserControl.Resources>
         <converter:TaskButtonBackgroundConverter x:Key="ButtonBackGround" />
         <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converter:StringValidToVisibilityConverter x:Key="StringValidToVisibilityConverter" /> 
     </UserControl.Resources>
 
     <Grid Visibility="{Binding Hide, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -31,12 +32,13 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="8" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="auto" />
+                <ColumnDefinition Width="28" />
             </Grid.ColumnDefinitions>
 
             <CheckBox Grid.Row="0"
                       Grid.Column="0"
-                      IsChecked="{Binding Done}" />
+                      IsChecked="{Binding Done}"
+                      Command="{Binding CheckTaskBoxCommand}" />
             <Button Grid.Row="0"
                     Grid.Column="2"
                     Background="{Binding Done, 
@@ -47,13 +49,18 @@
 
             <Expander Grid.Row="0"
                       Grid.Column="3"
-                      Name="ShowDescription" Margin="4,0,0,0" />
+                      Visibility="{Binding Description, 
+                        Converter={StaticResource StringValidToVisibilityConverter}, 
+                        ConverterParameter='NotEmpty'}"
+                      Name="ShowDescription"
+                      Margin="4,0,0,0" />
 
             <TextBlock Grid.Row="1"
                        Grid.Column="2"
                        Grid.ColumnSpan="2"
                        Text="{Binding Description}"
-                       TextWrapping="Wrap" Padding="4">
+                       TextWrapping="Wrap"
+                       Padding="4">
                 <TextBlock.Style>
                     <Style TargetType="TextBlock">
                         <Style.Triggers>

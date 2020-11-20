@@ -63,11 +63,18 @@ This also comes in handy if you would like to manage your checklists otherwise, 
 # Credits
 
 - The awesome GUI-style is powered by [AdonisUI](https://github.com/benruehl/adonis-ui)
+- The Icons for the Buttons are from [FontAwesome](https://fontawesome.com/) (see also [github link](https://github.com/charri/Font-Awesome-WPF/blob/master/README-WPF.md))
+- App-Icon is from [flaticon.com](https://www.flaticon.com/authors/freepik)
+
+# Bugs
+
+Becaus of limited time i have to abort unfinished (the current state meets my demands pretty well)
+Note that the undo/redo navigation is buggy (It's great to undo a delete operation but the rest doesn't really convice me)
 
 # Todo
 
 Several improvements are to be done (and could be added soon)
 - Special accentuation of important (or as important signed) tasks
-- More convenient edit view, something with undo/redo commands abort command and shortcuts ...
+- Subtasks should be only visible on demand
 - Shortcut-Generator => Saves generated checklist with clickable link
-- Well it comes late but some unit tests would be great to harden the code for further improvements (sorry, no strict Test-Driven-Development here)
+- Well it comes late, but some unit tests would be great to harden the code for further improvements (sorry, no strict Test-Driven-Development here)

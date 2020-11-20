@@ -1,7 +1,10 @@
-﻿using MiniChecklist.Interfaces;
+﻿using MiniChecklist.Events;
+using MiniChecklist.Interfaces;
 using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -9,9 +12,11 @@ namespace MiniChecklist.ViewModels
 {
     public class EditListViewModel : BindableBase, INavigationAware
     {
+        private readonly IEventAggregator _eventAggregator;
+
         public ObservableCollection<TodoTask> TodoList { get; } = new ObservableCollection<TodoTask>();
 
-        public DelegateCommand InsertFirstCommand { get; }
+        public DelegateCommandBase InsertFirstCommand { get; }
 
         /// <summary> For Preview only </summary>
         public EditListViewModel()
@@ -19,17 +24,42 @@ namespace MiniChecklist.ViewModels
 
         }
 
-        public EditListViewModel(ITaskListRepo taskListRepo)
+        public EditListViewModel(IEventAggregator eventAggregator, ITaskListRepo taskListRepo)
         {
+            _eventAggregator = eventAggregator;
             TodoList = taskListRepo.GetTaskList();
-            InsertFirstCommand = new DelegateCommand(OnInsertFirst);
+            InsertFirstCommand = new DelegateCommand<string>(OnInsertFirst);
+
+            eventAggregator.GetEvent<RefreshConnectionsEvent>().Subscribe(OnRefreshConnections);
         }
 
-        private void OnInsertFirst()
+        private void OnRefreshConnections()
         {
-            var item = new TodoTask("New", "");
-            item.SetParent(TodoList);
-            TodoList.Insert(0, item);
+            RefreshConnections();
+        }
+
+        private void OnInsertFirst(string command)
+        {
+            _eventAggregator.GetEvent<NewInkrementEvent>().Publish();
+
+            TodoTask item;
+            switch (command)
+            {
+                case "Append":
+                    item = new TodoTask("", "", _eventAggregator);
+                    item.SetParent(TodoList);
+                    TodoList.Add(item);
+                    break;
+
+                case "Prepend":
+                    item = new TodoTask("", "", _eventAggregator);
+                    item.SetParent(TodoList);
+                    TodoList.Insert(0, item);
+                    break;
+
+                default:
+                    throw new Exception($"Unknown Command '{command}'");
+            }
         }
 
         void AppendEmptyRecusively(ICollection<TodoTask> list)
@@ -38,7 +68,7 @@ namespace MiniChecklist.ViewModels
             {
                 AppendEmptyRecusively(item.SubList);
             }
-            list.Add(new TodoTask("", ""));
+            list.Add(new TodoTask("", "", _eventAggregator));
         }
 
         void SetParenthoodRecursively(TodoTask task)
@@ -65,6 +95,11 @@ namespace MiniChecklist.ViewModels
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            RefreshConnections();
+        }
+
+        private void RefreshConnections()
         {
             foreach (var item in TodoList)
             {

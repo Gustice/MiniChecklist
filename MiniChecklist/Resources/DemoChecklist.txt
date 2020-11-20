@@ -1,11 +1,11 @@
 ﻿Some Task # Task Description for Some Task 
 Some other Task # Task Description for Some other Task 
-	some subtask # Task Description for some subtask 
+	some subtask 
 	some other subtask # Task Description for some other subtask 
 		This have even ... # Task Description for This have even ... This description happens to be pretty long
 		further Levels # Task Description for further Levels, This description happens to be pretty long
-Some important Task! # Task Description for Some important Task! 
-And also this # Task Description for And also this 
+Some important Task! 
+And also this 
 Don't forget also ... # Task Description for Don't forget also ... 
 And Finish Last one! # Task Description for And Finish Last one! 
 	which is many # Task Description for which is many 

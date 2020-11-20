@@ -6,6 +6,7 @@
         xmlns:regions="http://prismlibrary.com/"
         regions:ViewModelLocator.AutoWireViewModel="True"
         xmlns:defines="clr-namespace:MiniChecklist.Defines"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
         Title="Check-List-Generator"
         Height="550"
@@ -14,8 +15,22 @@
         <Style TargetType="Window"
                BasedOn="{StaticResource {x:Type Window}}" />
     </Window.Style>
+    <Window.Resources>
+    </Window.Resources>
+    <Window.InputBindings>
+        <KeyBinding Command="{Binding SelectNextCommand}" Key="Down" />
+        <KeyBinding Command="{Binding SelectPreviousCommand}" Key="Up" />
+        <KeyBinding Command="{Binding CheckUncheckCommand}" Key="Space" />
+        <KeyBinding Command="{Binding LoadCommand}" Gesture="Control+O" />
+        <KeyBinding Command="{Binding NewCommand}" Gesture="Control+N" />
+        <KeyBinding Command="{Binding SaveCommand}" Gesture="Control+S" />
+        <KeyBinding Command="{Binding UndoCommand}" Gesture="Control+Z" />
+        <KeyBinding Command="{Binding RedoCommand}" Gesture="Control+Shift+Z" />
+        <KeyBinding Command="{Binding EditCommand}" Gesture="Control+E" />
+        <KeyBinding Command="{Binding FinishCommand}" Gesture="Control+F" />
+    </Window.InputBindings>
 
-    <Grid Margin="8">
+    <Grid Margin="4">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
@@ -31,22 +46,47 @@
                     <Setter Property="Padding"
                             Value="4" />
                 </Style>
+                <Style TargetType="fa:ImageAwesome">
+                    <Setter Property="Width"
+                            Value="20" />
+                    <Setter Property="Foreground"
+                            Value="White" />
+                    <Setter Property="Margin"
+                            Value="2" />
+                </Style>
             </StackPanel.Resources>
-            <Button Content="Open"
-                    Command="{Binding LoadCommand}" />
-            <Button Content="New"
-                    Command="{Binding NewCommand}" />
-            <Button Content="Edit"
-                    Command="{Binding EditCommand}" />
-            <Button Content="Finish"
-                    Command="{Binding FinishCommand}" />
-            <Button Content="Save"
-                    Command="{Binding SaveCommand}" />
-
+            <Button Command="{Binding LoadCommand}"
+                    ToolTip="Load File (Control+O)">
+                <fa:ImageAwesome Icon="FolderOutlinepenOutline" />
+            </Button>
+            <Button Command="{Binding NewCommand}"
+                    ToolTip="Create new File (Control+N)">
+                <fa:ImageAwesome Icon="FileOutline" />
+            </Button>
+            <Button Command="{Binding EditCommand}"
+                    ToolTip="Edit File (Control+E)">
+                <fa:ImageAwesome Icon="Edit" />
+            </Button>
+            <Button Command="{Binding FinishCommand}"
+                    ToolTip="Finish Edit (Control+F)">
+                <fa:ImageAwesome Icon="List" />
+            </Button>
+            <Button Command="{Binding SaveCommand}"
+                    ToolTip="Save File / Save as ... (Control+S)">
+                <fa:ImageAwesome Icon="Save" />
+            </Button>
+            <Button Command="{Binding UndoCommand}"
+                    ToolTip="Undo change (Control+Z)">
+                <fa:ImageAwesome Icon="Undo" />
+            </Button>
+            <Button Command="{Binding RedoCommand}"
+                    ToolTip="Redo change (Control+Shift+Z)">
+                <fa:ImageAwesome Icon="Repeat" />
+            </Button>
         </StackPanel>
 
         <TextBlock Grid.Row="1"
-                   Padding="5"
+                   Padding="4"
                    FontWeight="Bold"
                    FontSize="14"
                    HorizontalAlignment="Center"
