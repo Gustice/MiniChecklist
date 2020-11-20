@@ -88,6 +88,7 @@ namespace MiniChecklist.ViewModels
         }
 
         public DelegateCommandBase CheckTaskCommand { get; }
+        public DelegateCommandBase CheckTaskBoxCommand { get; }
         public DelegateCommandBase ManipulateTaskCommand { get; }
 
         public ObservableCollection<TodoTask> SubList { get; } = new ObservableCollection<TodoTask>();
@@ -95,7 +96,6 @@ namespace MiniChecklist.ViewModels
         /// <summary> For Previewer Only</summary>
         public TodoTask()
         {
-
             Task = "First level Task";
             Description = "Description for first level Task";
             SubList.Add(new TodoTask("Second level Task", "", null));
@@ -115,6 +115,7 @@ namespace MiniChecklist.ViewModels
             Task = task;
             Description = description;
             CheckTaskCommand = new DelegateCommand(OnCheckTask);
+            CheckTaskBoxCommand = new DelegateCommand(OnCheckTaskBox);
             ManipulateTaskCommand = new DelegateCommand<string>(OnManipulateTask);
         }
 
@@ -175,6 +176,10 @@ namespace MiniChecklist.ViewModels
         private void OnCheckTask()
         {
             Done = !Done;
+            Hide = Done && HideFinished;
+        }
+        private void OnCheckTaskBox()
+        {
             Hide = Done && HideFinished;
         }
 

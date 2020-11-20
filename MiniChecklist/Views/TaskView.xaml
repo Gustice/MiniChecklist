@@ -37,7 +37,8 @@
 
             <CheckBox Grid.Row="0"
                       Grid.Column="0"
-                      IsChecked="{Binding Done}" />
+                      IsChecked="{Binding Done}"
+                      Command="{Binding CheckTaskBoxCommand}" />
             <Button Grid.Row="0"
                     Grid.Column="2"
                     Background="{Binding Done, 
