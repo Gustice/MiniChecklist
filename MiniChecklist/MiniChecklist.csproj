@@ -7,13 +7,14 @@
     <Authors>Gustice</Authors>
     <Company />
     <Description>Callable Checklist tool to not forget a certain thing.
-It just reads a text file and displays each line as a button to be checked.</Description>
+It just reads a text file and displays each line as a button to be checked.
+Text after # in each line is displayed as tooltip or description</Description>
     <Copyright>Gustice</Copyright>
     <PackageProjectUrl>https://github.com/Gustice/MiniChecklist</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Gustice/MiniChecklist</RepositoryUrl>
-    <AssemblyVersion>0.3.0.0</AssemblyVersion>
-    <FileVersion>0.3.0.0</FileVersion>
-    <Version>0.3.0</Version>
+    <AssemblyVersion>0.4.0.0</AssemblyVersion>
+    <FileVersion>0.4.0.0</FileVersion>
+    <Version>0.4.0</Version>
     <ApplicationIcon>checklists.ico</ApplicationIcon>
   </PropertyGroup>
 
