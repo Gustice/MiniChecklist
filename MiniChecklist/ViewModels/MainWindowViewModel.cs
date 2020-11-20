@@ -258,11 +258,12 @@ namespace MiniChecklist.ViewModels
             _logger.Debug("Starting new File");
             _taskList.Clear();
             _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(EditListView));
-            CanFinish = true;
-            CanEdit = false;
 
             UndoStack.Clear();
             RedoStack.Clear();
+
+            CanFinish = true;
+            CanEdit = false;
         }
 
         private void OpenNewFileEvent(string path)

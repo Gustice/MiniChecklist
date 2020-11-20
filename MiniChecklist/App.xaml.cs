@@ -76,15 +76,12 @@ namespace MiniChecklist
             _logger.Info($"############ App Version '{Assembly.GetExecutingAssembly().GetName().Version}' Initialized ################");
         }
 
-        
-
         void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             //e.Handled = true; // Not handled
 
             _logger.Fatal(e.Exception, e.Exception.ToString());
             MessageBox.Show("Sorry for the inconvenience. The programm went into an error. See Log for more details", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            
         }
     }
 }
