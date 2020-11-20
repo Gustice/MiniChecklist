@@ -77,14 +77,22 @@ namespace MiniChecklist.ViewModels
         public string Task
         {
             get => _task;
-            set => SetProperty(ref _task, value);
+            set
+            {
+                if (SetProperty(ref _task, value))
+                    _newInkrementEvent.Publish();
+            }
         }
 
         private string _description;
         public string Description
         {
             get => _description;
-            set => SetProperty(ref _description, value);
+            set
+            {
+                if (SetProperty(ref _description, value))
+                    _newInkrementEvent.Publish();
+            }
         }
 
         public DelegateCommandBase CheckTaskCommand { get; }

@@ -22,6 +22,7 @@ namespace MiniChecklist.ViewModels
     {
         private readonly ITaskFileReader _taskFileReader;
         private readonly IRegionManager _regionManager;
+        private readonly IEventAggregator _eventAggregator;
         private readonly ObservableCollection<TodoTask> _taskList;
         private readonly PathIndex _currentPath = new PathIndex();
 
@@ -88,12 +89,12 @@ namespace MiniChecklist.ViewModels
 
         public MainWindowViewModel(IRegionManager regionManagerm, IEventAggregator eventAggregator, ITaskFileReader TaksFeilReader, ITaskListRepo taskListRepo) : this()
         {
-            _taskFileReader = TaksFeilReader;
             _regionManager = regionManagerm;
+            _eventAggregator = eventAggregator;
+            _taskFileReader = TaksFeilReader;
             _taskList = taskListRepo.GetTaskList();
 
-            eventAggregator.GetEvent<LoadFileEvent>().Subscribe(OpenNewFileEvent);
-            eventAggregator.GetEvent<NewInkrementEvent>().Subscribe(OnNewInkrement);
+            _eventAggregator.GetEvent<LoadFileEvent>().Subscribe(OpenNewFileEvent);
         }
 
         private void OnNewInkrement()
@@ -132,6 +133,7 @@ namespace MiniChecklist.ViewModels
 
         private void OnFinish()
         {
+            _eventAggregator.GetEvent<NewInkrementEvent>().Unsubscribe(OnNewInkrement);
             _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(ChecklistView));
             CanFinish = false;
             CanEdit = true;
@@ -143,6 +145,7 @@ namespace MiniChecklist.ViewModels
 
         private void OnEdit()
         {
+            _eventAggregator.GetEvent<NewInkrementEvent>().Subscribe(OnNewInkrement);
             _regionManager.RequestNavigate(RegionNames.MainRegion, nameof(EditListView));
             CanFinish = true;
             CanEdit = false;
@@ -150,20 +153,25 @@ namespace MiniChecklist.ViewModels
                
         private void OnUndo()
         {
+            _eventAggregator.GetEvent<NewInkrementEvent>().Unsubscribe(OnNewInkrement);
+
             RedoStack.Push(CollectAllTaskItems());
             var inkrement = UndoStack.Pop();
             
             var result = _taskFileReader.ReadTasksFromList(inkrement);
             UpdateView(result);
+            _eventAggregator.GetEvent<NewInkrementEvent>().Subscribe(OnNewInkrement);
         }
 
         private void OnRedo()
         {
+            _eventAggregator.GetEvent<NewInkrementEvent>().Unsubscribe(OnNewInkrement);
             var inkrement = RedoStack.Pop();
             UndoStack.Push(inkrement);
 
             var result = _taskFileReader.ReadTasksFromList(inkrement);
             UpdateView(result);
+            _eventAggregator.GetEvent<NewInkrementEvent>().Subscribe(OnNewInkrement);
         }
 
         private void OnSave()
