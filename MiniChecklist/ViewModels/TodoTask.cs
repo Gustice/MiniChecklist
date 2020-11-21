@@ -120,8 +120,12 @@ namespace MiniChecklist.ViewModels
 
         public TodoTask(string task, string description, IEventAggregator ea) : this(ea)
         {
-            Task = task;
-            Description = description;
+            Task = task.Trim();
+            if (!string.IsNullOrEmpty(description))
+                Description = description.Trim();
+            else
+                Description = null;
+            
             CheckTaskCommand = new DelegateCommand(OnCheckTask);
             CheckTaskBoxCommand = new DelegateCommand(OnCheckTaskBox);
             ManipulateTaskCommand = new DelegateCommand<string>(OnManipulateTask);
@@ -230,6 +234,12 @@ namespace MiniChecklist.ViewModels
         public void Remove(object value) => SubList.Remove((TodoTask)value);
         public void RemoveAt(int index) => SubList.RemoveAt(index);
 
-        public override string ToString() => $"{Task} # {Description}";
+        public override string ToString()
+        {
+            if (string.IsNullOrEmpty(Description))
+                return $"{Task}";
+
+            return $"{Task} # {Description}";
+        }
     }
 }
