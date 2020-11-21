@@ -77,4 +77,3 @@ Several improvements are to be done (and could be added soon)
 - Special accentuation of important (or as important signed) tasks
 - Subtasks should be only visible on demand
 - Shortcut-Generator => Saves generated checklist with clickable link
-- Well it comes late, but some unit tests would be great to harden the code for further improvements (sorry, no strict Test-Driven-Development here)

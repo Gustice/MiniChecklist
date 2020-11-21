@@ -49,47 +49,44 @@ namespace MiniChecklist.FileReader
         {
             var list = new List<TodoTask>();
 
-            int indent = 0;
-            ICollection<TodoTask> lastIdx = null;
+            int lastIndent = 0;
+            ICollection<TodoTask> appendList = list;
+            ICollection<TodoTask> insertList = null;
             Stack<ICollection<TodoTask>> idxStack = new Stack<ICollection<TodoTask>>();
             idxStack.Push(list);
             foreach (var item in lines)
             {
-                var ci = TabPreambel.Match(item).Value.Length;
+                var indent = TabPreambel.Match(item).Value.Length;
                 var cleared = TabPreambel.Replace(item, "");
+                if (string.IsNullOrEmpty(cleared))
+                    continue;
 
                 TodoTask task = ProcessLine(cleared);
-
                 if (task == null)
-                {
                     continue;
-                }
 
                 // Ident stays on same level
-                if (ci == indent)
+                if (indent == lastIndent)
                 {
-                    idxStack.Peek().Add(task);
-                    lastIdx = task.SubList;
+                    appendList.Add(task);
                 }
                 // Ident increases by one
-                else if (ci == indent + 1)
+                else if (indent == lastIndent + 1)
                 {
-                    indent = ci;
-                    idxStack.Push(lastIdx);
-                    lastIdx.Add(task);
+                    idxStack.Push(insertList);
+                    insertList.Add(task);
                 }
                 // Ident decreses by any level in range of stack
-                else if (ci < indent)
+                else if (indent < lastIndent)
                 {
-                    if ((indent - ci) > idxStack.Count)
-                        return list;
-
-                    for (int i = 0; i < indent - ci; i++)
-                    {
-                        idxStack.Pop();
+                    if ((lastIndent - indent) > idxStack.Count)
+                    { 
+                        return list; // Format error
                     }
 
-                    indent = ci;
+                    for (int i = 0; i < lastIndent - indent; i++)
+                        idxStack.Pop();
+
                     idxStack.Peek().Add(task);
                 }
                 // Else format error
@@ -97,6 +94,10 @@ namespace MiniChecklist.FileReader
                 {
                     return list;
                 }
+
+                appendList = idxStack.Peek();
+                insertList = task.SubList;
+                lastIndent = indent;
             }
 
             return list;
@@ -106,14 +107,15 @@ namespace MiniChecklist.FileReader
         {
             TodoTask task = null;
             var parts = cleared.Split('#');
+            
             if (parts.Length == 2)
             {
-                task = new TodoTask(parts[0], parts[1], _eventAggregator);
+                task = new TodoTask(parts[0].Trim(), parts[1].Trim(), _eventAggregator);
 
             }
             else if (parts.Length == 1)
             {
-                task = new TodoTask(parts[0], "", _eventAggregator);
+                task = new TodoTask(parts[0].Trim(), "", _eventAggregator);
             }
 
             return task;
