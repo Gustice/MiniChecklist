@@ -7,13 +7,13 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="9ee84fe5-56f1-4ae4-90d2-75b9ba696490"
-    Publisher="CN=Jakob"
-    Version="1.0.0.0" />
+    Name="MiniChecklist"
+    Publisher="CN=Gustice@Github"
+    Version="0.5.0.0" />
 
   <Properties>
     <DisplayName>MiniChecklist.AppPackage</DisplayName>
-    <PublisherDisplayName>Jakob</PublisherDisplayName>
+    <PublisherDisplayName>Gustice</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
