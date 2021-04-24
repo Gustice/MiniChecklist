@@ -28,7 +28,7 @@
 
     </UserControl.Resources>
 
-    <Grid Visibility="{Binding Hide, Converter={StaticResource BoolToVisibilityConverter}}">
+    <Grid Visibility="{Binding Hide, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter='!'}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />

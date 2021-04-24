@@ -7,7 +7,10 @@
         regions:ViewModelLocator.AutoWireViewModel="True"
         xmlns:defines="clr-namespace:MiniChecklist.Defines"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:converter="clr-namespace:MiniChecklist.Converter"
+        xmlns:local="clr-namespace:MiniChecklist.ViewModels"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:MainWindowViewModel}"
         Title="Check-List-Generator"
         Height="550"
         Width="350">
@@ -16,6 +19,7 @@
                BasedOn="{StaticResource {x:Type Window}}" />
     </Window.Style>
     <Window.Resources>
+        <converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>
     <Window.InputBindings>
         <KeyBinding Command="{Binding SelectNextCommand}" Key="Down" />
@@ -60,19 +64,25 @@
                 <fa:ImageAwesome Icon="FolderOutlinepenOutline" />
             </Button>
             <Button Command="{Binding NewCommand}"
-                    ToolTip="Create new File (Control+N)">
+                    ToolTip="Create new File (Control+N)"
+                    >
                 <fa:ImageAwesome Icon="FileOutline" />
             </Button>
             <Button Command="{Binding EditCommand}"
-                    ToolTip="Edit File (Control+E)">
+                    ToolTip="Edit File (Control+E)"
+                    Visibility="{Binding CanEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                    >
                 <fa:ImageAwesome Icon="Edit" />
             </Button>
             <Button Command="{Binding FinishCommand}"
-                    ToolTip="Finish Edit (Control+F)">
+                    ToolTip="Finish Edit (Control+F)"
+                    Visibility="{Binding CanFinish, Converter={StaticResource BoolToVisibilityConverter}}"
+                    >
                 <fa:ImageAwesome Icon="List" />
             </Button>
             <Button Command="{Binding SaveCommand}"
-                    ToolTip="Save File / Save as ... (Control+S)">
+                    ToolTip="Save File / Save as ... (Control+S)"
+                    >
                 <fa:ImageAwesome Icon="Save" />
             </Button>
             <Button Command="{Binding UndoCommand}"
