@@ -55,7 +55,7 @@ namespace MiniChecklist.Tests.FileReader
 
         [TestCase("Task")]
         [TestCase("  Task  ")]
-        [TestCase("Ridiculosly annoingly long tas task")]
+        [TestCase("Ridiculosly annoingly long task")]
         public void ProcessLinesWithoutDescription_OneTaskReturned(string input)
         {
             var inputList = new List<string>() { input};
@@ -80,7 +80,7 @@ namespace MiniChecklist.Tests.FileReader
 
         [TestCase("Task # Descirption")]
         [TestCase("  Task    #    Descirption    ")]
-        [TestCase("Ridiculosly annoingly long tas task # Ridiculosly annoingly long tas description ")]
+        [TestCase("Ridiculosly annoingly long task # Ridiculosly annoingly long task description ")]
         public void ProcessLinesWithDescription_OneTaskReturned(string input)
         {
             var inputList = new List<string>() { input };
@@ -107,6 +107,21 @@ namespace MiniChecklist.Tests.FileReader
             Assert.AreEqual("Task2", output.Todos[1].Task);
             Assert.AreEqual("Task3", output.Todos[2].Task);
         }
+
+        [Test]
+        public void ProcessNestedSeriesOfLines()
+        {
+            var inputList = new List<string>() { "Task1", "\tTask1.1", "Task2" };
+
+            var output = _sut.ReadTasksFromList(inputList);
+
+            Assert.AreEqual(2, output.Todos.Count);
+            Assert.AreEqual("Task1", output.Todos[0].Task);
+            Assert.AreEqual(1, output.Todos[0].SubList.Count);
+            Assert.AreEqual("Task1.1", output.Todos[0].SubList[0].Task);
+            Assert.AreEqual("Task2", output.Todos[1].Task);
+        }
+
 
         [Test]
         public void ProcessContinuouslyNestedSeriesOfLines()
